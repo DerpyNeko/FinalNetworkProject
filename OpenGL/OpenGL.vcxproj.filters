@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shader Stuff">
+      <UniqueIdentifier>{b5026d64-9131-48f1-aff1-9472d74d949c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Mesh Manager">
+      <UniqueIdentifier>{bfd14516-817e-4132-be0a-9631a141f748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{a1098570-a94f-4f37-bf28-57bfa469e582}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Stuff\Shaders">
+      <UniqueIdentifier>{3cd19d30-3e70-4d79-8f0e-0fba69cb2ccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LightManager">
+      <UniqueIdentifier>{4f563f87-b7b4-4a1d-9432-cc3a8febf40a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{aa7687d2-1be8-47a2-9f7c-e5761ae4747d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{7b3ecc3e-a5f7-4441-9d99-3dc758b48205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TextureManager">
+      <UniqueIdentifier>{b3444a84-52aa-4471-b3cc-56e009734392}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugRenderer">
+      <UniqueIdentifier>{d284ff6e-7af9-4d94-ab08-b4e940adbb52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Error">
+      <UniqueIdentifier>{89a30d3c-aa0f-4bd7-9307-37b4e05b5a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{c2b57ee5-87ce-4379-95f3-2ffb1ff118fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cShader.cpp">
+      <Filter>Shader Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="cShaderManager.cpp">
+      <Filter>Shader Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cVAOMeshManager.cpp">
+      <Filter>Mesh Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="sModelDrawInfo.cpp">
+      <Filter>Mesh Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="UserIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadModels.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cLightHelper.cpp">
+      <Filter>LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cGLColourHelper.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="cMeshObject.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cMeshObject_Quaternion.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="cLightManager.cpp">
+      <Filter>LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateLights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\C24BitBMPpixel.cpp">
+      <Filter>TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\cBasicTextureManager.cpp">
+      <Filter>TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\CTextureFromBMP.cpp">
+      <Filter>TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderer\cDebugRenderer.cpp">
+      <Filter>DebugRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderer\cDebugRenderer_BuiltInShapes.cpp">
+      <Filter>DebugRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Error\CErrorLog.cpp">
+      <Filter>Error</Filter>
+    </ClCompile>
+    <ClCompile Include="Error\COpenGLError.cpp">
+      <Filter>Error</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cAABB.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="linmath.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cShaderManager.h">
+      <Filter>Shader Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="sPlyVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sPlyTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cMeshObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cVAOMeshManager.h">
+      <Filter>Mesh Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="sModelDrawInfo.h">
+      <Filter>Mesh Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="globalStuff.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="globalOpenGLStuff.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="cLightManager.h">
+      <Filter>LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cLightHelper.h">
+      <Filter>LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cGLColourHelper.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="cCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\C24BitBMPpixel.h">
+      <Filter>TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\cBasicTextureManager.h">
+      <Filter>TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\CTextureFromBMP.h">
+      <Filter>TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderer\cDebugRenderer.h">
+      <Filter>DebugRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderer\iDebugRenderer.h">
+      <Filter>DebugRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Error\CErrorLog.h">
+      <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Error\COpenGLError.h">
+      <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="cAABB.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragment01.glsl">
+      <Filter>Shader Stuff\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\vertex01.glsl">
+      <Filter>Shader Stuff\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
