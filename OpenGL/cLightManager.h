@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #include <vector>
+#include <string>
 
 struct sLight
 {
