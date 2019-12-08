@@ -12,6 +12,10 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 	sphereInfo.meshFileName = "Sphere_n_uv.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(sphereInfo, shaderProgramID);
 
+	sModelDrawInfo cubeInfo;
+	cubeInfo.meshFileName = "cube_n_uv.ply";
+	pTheVAOMeshManager->LoadModelIntoVAO(cubeInfo, shaderProgramID);
+
 	sModelDrawInfo sphereInvertedNormalsInfo;
 	sphereInvertedNormalsInfo.meshFileName = "Sphere_n_uv_INVERTED_NORMALS.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(sphereInvertedNormalsInfo, shaderProgramID);
@@ -44,6 +48,7 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 // Loads the models we are drawing into the vector
 void LoadModelsIntoScene(std::vector<cMeshObject*> &vec_pObjectsToDraw)
 {
+	// skybox
 	{
 		// (could also be a cube, or whatever)
 		cMeshObject* pSkyBoxObject = new cMeshObject();
@@ -59,101 +64,26 @@ void LoadModelsIntoScene(std::vector<cMeshObject*> &vec_pObjectsToDraw)
 		vec_pObjectsToDraw.push_back(pSkyBoxObject);
 	}
 
+	// cube
 	{
-		cMeshObject* pTerrain = new cMeshObject();
+		cMeshObject* pCube = new cMeshObject();
 
-		pTerrain->position = glm::vec3(0.0f, 0.0f, 0.0f);
-		pTerrain->setDiffuseColour(glm::vec3(0.1f, 0.1f, 0.1f));
-		pTerrain->setUniformScale(1.0f);
-		pTerrain->setSpecularPower(100.0f);
+		//pCube->position = glm::vec3(1000.0f, 0.0f, 0.0f);
+		pCube->setDiffuseColour(glm::vec3(0.1f, 0.1f, 0.1f));
+		pCube->setUniformScale(1.0f);
+		pCube->setSpecularPower(100.0f);
 
-		pTerrain->friendlyName = "Terrain";
-		pTerrain->meshName = "Terrain.ply";
-		pTerrain->bIsVisible = true;
+		pCube->friendlyName = "Cube";
+		pCube->meshName = "cube_n_uv.ply";
+		pCube->bIsVisible = false;
 
-		sTextureInfo sandTexture;
-		sandTexture.name = "SandTexture.bmp";
-		sandTexture.strength = 1.0f;
-		pTerrain->vecTextures.push_back(sandTexture);
+		//sTextureInfo sandTexture;
+		//sandTexture.name = "SandTexture.bmp";
+		//sandTexture.strength = 1.0f;
+		//pCube->vecTextures.push_back(sandTexture);
 
-		pTerrain->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pTerrain);
-	}
-
-	{
-		cMeshObject* pDebugSphere = new cMeshObject();
-		pDebugSphere->meshName = "Sphere_n_uv.ply";
-		pDebugSphere->friendlyName = "StartA";
-		pDebugSphere->position = glm::vec3(-145.0f, 20.0f, -210.0f);
-		pDebugSphere->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
-		pDebugSphere->setUniformScale(5.0f);
-
-		pDebugSphere->bIsWireFrame = true;
-		pDebugSphere->bIsVisible = true;
-		pDebugSphere->bIsUpdatedByPhysics = true;
-
-		pDebugSphere->pTheShape = new sSphere(5.0f);
-		pDebugSphere->shapeType = cMeshObject::SPHERE;
-
-		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pDebugSphere);
-	}
-
-	{
-		cMeshObject* pDebugSphere = new cMeshObject();
-		pDebugSphere->meshName = "Sphere_n_uv.ply";
-		pDebugSphere->friendlyName = "StartT";
-		pDebugSphere->position = glm::vec3(-145.0f, 20.0f, -210.0f);
-		pDebugSphere->setDiffuseColour(glm::vec3(1.0f, 1.0f, 0.0f));
-		pDebugSphere->setUniformScale(5.0f);
-
-		pDebugSphere->bIsWireFrame = true;
-		pDebugSphere->bIsVisible = false;
-		pDebugSphere->bIsUpdatedByPhysics = true;
-
-		pDebugSphere->pTheShape = new sSphere(5.0f);
-		pDebugSphere->shapeType = cMeshObject::SPHERE;
-
-		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pDebugSphere);
-	}
-
-	{
-		cMeshObject* pDebugSphere = new cMeshObject();
-		pDebugSphere->meshName = "Sphere_n_uv.ply";
-		pDebugSphere->friendlyName = "EndA";
-		pDebugSphere->position = glm::vec3(-90.0f, 20.0f, -210.0f);
-		pDebugSphere->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
-		pDebugSphere->setUniformScale(5.0f);
-
-		pDebugSphere->bIsWireFrame = true;
-		pDebugSphere->bIsVisible = true;
-		pDebugSphere->bIsUpdatedByPhysics = true;
-
-		pDebugSphere->pTheShape = new sSphere(5.0f);
-		pDebugSphere->shapeType = cMeshObject::SPHERE;
-
-		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pDebugSphere);
-	}
-
-	{
-		cMeshObject* pDebugSphere = new cMeshObject();
-		pDebugSphere->meshName = "Sphere_n_uv.ply";
-		pDebugSphere->friendlyName = "EndT";
-		pDebugSphere->position = glm::vec3(-90.0f, 20.0f, -210.0f);
-		pDebugSphere->setDiffuseColour(glm::vec3(0.0f, 1.0f, 1.0f));
-		pDebugSphere->setUniformScale(5.0f);
-
-		pDebugSphere->bIsWireFrame = true;
-		pDebugSphere->bIsVisible = false;
-		pDebugSphere->bIsUpdatedByPhysics = true;
-
-		pDebugSphere->pTheShape = new sSphere(5.0f);
-		pDebugSphere->shapeType = cMeshObject::SPHERE;
-
-		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pDebugSphere);
+		pCube->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(pCube);
 	}
 
 	{	// This sphere is the tiny little debug sphere

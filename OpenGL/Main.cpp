@@ -58,7 +58,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-	window = glfwCreateWindow(1280, 720, "Checkpoint 6", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "Networking Final Project", NULL, NULL);
 
 	if (!window)
 	{
@@ -143,8 +143,8 @@ int main(void)
 
 	// Camera creation
 	::g_pCamera = new cCamera();
-	g_pCamera->eye = { -890.0f, 115.0f, -810.0f };
-	g_pCamera->setCameraAt(glm::vec3(0.785847f, 0.00212923f, 0.61842f));
+	g_pCamera->eye = { 0.0f, 50.0f, 0.0f };
+	g_pCamera->setCameraAt(glm::vec3(0.0f, -1.0f, 0.0f));
 
 	LoadModelTypes(::g_pVAOMeshManager, program);
 	LoadModelsIntoScene(::g_vec_pObjectsToDraw);
@@ -241,8 +241,8 @@ int main(void)
 			}
 		}//for ( sLight* light : g_Lights
 
+		 // Draw the skybox first 
 		{
-			 // Draw the skybox first 
 			cMeshObject* pSkyBox = findObjectByFriendlyName("SkyBoxObject");
 			pSkyBox->position = g_pCamera->eye;
 			pSkyBox->bIsVisible = true;
@@ -273,6 +273,23 @@ int main(void)
 			glUniform1f(useSkyBoxTexture_UniLoc, (float)GL_FALSE);
 		}
 
+		// Add floor of cubes
+		for (int i = -4; i < 5; i++)
+		{
+			for (int j = -4; j < 5; j++)
+			{
+				cMeshObject* pFloor = findObjectByFriendlyName("Cube");
+				pFloor->bIsVisible = true;
+				pFloor->position = glm::vec3((float)i, 0.0f, (float)j);
+				pFloor->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+				pFloor->pDebugRenderer = ::g_pDebugRenderer;
+				glm::mat4x4 matModel = glm::mat4(1.0f);
+				DrawObject(pFloor, matModel, program);
+			}
+		}
+
+
 		// Draw all the solid objects in the "scene"
 		for (unsigned int objIndex = 0; objIndex != (unsigned int)vec_pSolidObject.size(); objIndex++)
 		{
@@ -296,17 +313,13 @@ int main(void)
 		// High res timer (likely in ms or ns)
 		double currentTime = glfwGetTime();
 		double deltaTime = currentTime - lastTime;
-
+		
 		//::g_pDebugRendererACTUAL->RenderDebugObjects(matView, matProjection, deltaTime);
 
 		UpdateWindowTitle(window);
-
 		glfwSwapBuffers(window);		// Shows what we drew
-
 		glfwPollEvents();
-
 		ProcessAsyncKeys(window);
-
 		ProcessAsyncMouse(window);
 
 	}//while (!glfwWindowShouldClose(window))
@@ -352,7 +365,6 @@ cMeshObject* findObjectByFriendlyName(std::string theNameToFind)
 	return NULL;
 }
 
-
 cMeshObject* findObjectByUniqueID(unsigned int ID_to_find)
 {
 	for (unsigned int index = 0; index != g_vec_pObjectsToDraw.size(); index++)
@@ -365,7 +377,6 @@ cMeshObject* findObjectByUniqueID(unsigned int ID_to_find)
 
 	return NULL;
 }
-
 
 void DrawDebugLightSpheres(cLightHelper* pLightHelper, sLight* light, cMeshObject* pDebugSphere, glm::mat4 matBall, GLuint program, glm::vec4 oldDiffuse, glm::vec3 oldScale)
 {
