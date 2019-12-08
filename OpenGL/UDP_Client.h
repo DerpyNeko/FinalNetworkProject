@@ -15,5 +15,25 @@
 
 using std::string;
 
-//void _PrintWSAError(const char* file, int line);
-//#define PrintWSAError() _PrintWSAError(__FILE__, __LINE__)
+void _PrintWSAError(const char* file, int line);
+#define PrintWSAError() _PrintWSAError(__FILE__, __LINE__)
+
+class UDPClient
+{
+public:
+	UDPClient(void);
+	~UDPClient(void);
+
+	void CreateSocket(string ip, int port);
+	void Update(void);
+
+	void Send(char* data, int numBytes);
+
+	void SetPosition(int id, float& x, float& y);
+private:
+	void SetNonBlocking(SOCKET socket);
+	void Recv(void);
+
+	SOCKET mServerSocket;
+	struct sockaddr_in si_other;
+};

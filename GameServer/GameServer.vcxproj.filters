@@ -24,10 +24,16 @@
     <ClCompile Include="UDP_Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main_Server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FinalProject.pb.h">
       <Filter>Proto</Filter>
+    </ClInclude>
+    <ClInclude Include="UDP_Server.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

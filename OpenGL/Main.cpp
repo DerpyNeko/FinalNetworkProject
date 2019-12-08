@@ -20,6 +20,9 @@
 #include "DebugRenderer/cDebugRenderer.h"
 #include "cLightHelper.h"
 
+#include "UDP_Client.h"
+#include <conio.h>
+
 cDebugRenderer* g_pDebugRendererACTUAL = NULL;
 iDebugRenderer* g_pDebugRenderer = NULL;
 
@@ -44,8 +47,79 @@ static void error_callback(int error, const char* description)
 	fprintf(stderr, "Error: %s\n", description);
 }
 
+// Handle the client thread and receives messages from the server
+void ClientThread()
+{
+	std::vector<char> packet(512);
+	int packLength;
+	//while (run)
+	//{
+	//	if ((packLength = recv(Connection, &packet[0], packet.size(), NULL)) < 1) {
+	//		std::cout << "Closing connection" << std::endl;
+	//		closesocket(Connection);
+	//		WSACleanup();
+	//		run = false;
+	//	}
+	//	else
+	//	{
+	//		Protocol* messageProtocol = new Protocol();
+	//		messageProtocol->CreateBuffer(512);
+
+	//		messageProtocol->buffer->mBuffer = packet;
+	//		messageProtocol->ReadHeader(*messageProtocol->buffer);
+
+	//		messageProtocol->buffer->ResizeBuffer(messageProtocol->messageHeader.packetLength);
+
+	//		commandID = messageProtocol->messageHeader.commandId;
+
+	//		if (commandID == 5)
+	//		{
+	//			messageProtocol->ReceiveUsername(*messageProtocol->buffer);
+	//			isValidCredentials = true;
+	//			userName = messageProtocol->messageBody.userName;
+	//		}
+
+	//		messageProtocol->ReceiveMessage(*messageProtocol->buffer);
+	//		std::cout << messageProtocol->messageBody.message << std::endl;
+
+	//		delete messageProtocol;
+	//	}
+	//}
+}
+
+void RunConsole(void)
+{
+	UDPClient client;
+	client.CreateSocket("127.0.0.1", 5150);
+
+	std::cout << "Connected!" << std::endl;
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL); //Create a thread
+
+	//int ch;
+	//bool run = true;
+	//while (run)
+	//{
+	//	if (_kbhit())
+	//	{
+	//		ch = _getch();
+
+	//		switch (ch)
+	//		{
+	//		case 27: run = false; break;
+	//		default:
+	//			client.Send((char*)(&ch), 1);
+	//			break;
+	//		}
+	//	}
+	//	client.Update();
+	//}
+}
+
+
 int main(void)
 {
+	RunConsole();
+
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(error_callback);
