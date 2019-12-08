@@ -1,6 +1,5 @@
 // PhysicsStuff
 #include "globalStuff.h"
-#include "cAABB.h"
 
 typedef glm::vec3 Point;
 typedef glm::vec3 Vector;
@@ -8,35 +7,35 @@ typedef glm::vec3 Vector;
 Point ClosestPtPointTriangle(Point p, Point a, Point b, Point c);
 
 // Called every frame
-void CheckCollision(cMeshObject* target, cMeshObject* actual, std::vector< cAABB::sAABB_Triangle > triangles)
-{
-	// Test for collisions
-	for (cAABB::sAABB_Triangle t : triangles)
-	{
-		sSphere* pSphereA = (sSphere*)(target->pTheShape);
-		sTriangle* pTri = (sTriangle*)(&t);
-
-		glm::vec3 closestPointToTri = ClosestPtPointTriangle(target->position, pTri->v[0], pTri->v[1], pTri->v[2]);
-
-		// is this point LESS THAN the radius of the sphere? 
-		if (glm::distance(closestPointToTri, target->position) <= pSphereA->radius)
-		{
-			if (closestPointToTri.y < 20.0f)
-			{
-				target->position.y = 20 - (20.0 - closestPointToTri.y);	
-
-			}
-			else if (closestPointToTri.y > 20.0f)
-			{
-				target->position.y = 20 + (closestPointToTri.y - 20.0);
-			}	
-
-			actual->position.y = target->position.y + 20.0f;
-		}
-	}
-
-	return;
-}
+//void CheckCollision(cMeshObject* target, cMeshObject* actual, std::vector< cAABB::sAABB_Triangle > triangles)
+//{
+//	// Test for collisions
+//	for (cAABB::sAABB_Triangle t : triangles)
+//	{
+//		sSphere* pSphereA = (sSphere*)(target->pTheShape);
+//		sTriangle* pTri = (sTriangle*)(&t);
+//
+//		glm::vec3 closestPointToTri = ClosestPtPointTriangle(target->position, pTri->v[0], pTri->v[1], pTri->v[2]);
+//
+//		// is this point LESS THAN the radius of the sphere? 
+//		if (glm::distance(closestPointToTri, target->position) <= pSphereA->radius)
+//		{
+//			if (closestPointToTri.y < 20.0f)
+//			{
+//				target->position.y = 20 - (20.0 - closestPointToTri.y);	
+//
+//			}
+//			else if (closestPointToTri.y > 20.0f)
+//			{
+//				target->position.y = 20 + (closestPointToTri.y - 20.0);
+//			}	
+//
+//			actual->position.y = target->position.y + 20.0f;
+//		}
+//	}
+//
+//	return;
+//}
 
 Point ClosestPtPointTriangle(Point p, Point a, Point b, Point c)
 {

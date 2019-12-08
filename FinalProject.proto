@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package FinalProject;
+
+message UserInput {
+required int32 id = 1;
+required int32 input = 2;
+}
+
+message GameScene {
+required int32 id = 1;
+repeated Player players = 2;
+repeated Bullet bullets = 3;
+}
+
+message Player {
+required int32 state = 1;
+repeated float position = 2;
+repeated float velocity = 3;
+repeated float orientation = 4;
+}
+
+message Bullet {
+required int32 state = 1;
+repeated float position = 2;
+repeated float velocity = 3;
+}

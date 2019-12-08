@@ -24,6 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OpenGL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GameClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -86,8 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SourcePath)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SourcePath)lib/x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SourcePath)include;$(SolutionDir)dev\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SourcePath)lib/x64;$(SolutionDir)dev\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,17 +139,17 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;libprotobuf.lib;libprotobuf-lite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cAABB.cpp" />
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cGLColourHelper.cpp" />
     <ClCompile Include="cLightHelper.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="Error\CErrorLog.cpp" />
     <ClCompile Include="Error\COpenGLError.cpp" />
+    <ClCompile Include="FinalProject.pb.cc" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="LoadModels.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -172,10 +174,10 @@
     <ClCompile Include="TextureManager\C24BitBMPpixel.cpp" />
     <ClCompile Include="TextureManager\cBasicTextureManager.cpp" />
     <ClCompile Include="TextureManager\CTextureFromBMP.cpp" />
+    <ClCompile Include="UDP_Client.cpp" />
     <ClCompile Include="UserIO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cAABB.h" />
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cGLColourHelper.h" />
     <ClInclude Include="cLightHelper.h" />
@@ -187,6 +189,7 @@
     <ClInclude Include="DebugRenderer\iDebugRenderer.h" />
     <ClInclude Include="Error\CErrorLog.h" />
     <ClInclude Include="Error\COpenGLError.h" />
+    <ClInclude Include="FinalProject.pb.h" />
     <ClInclude Include="globalOpenGLStuff.h" />
     <ClInclude Include="globalStuff.h" />
     <ClInclude Include="linmath.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="TextureManager\C24BitBMPpixel.h" />
     <ClInclude Include="TextureManager\cBasicTextureManager.h" />
     <ClInclude Include="TextureManager\CTextureFromBMP.h" />
+    <ClInclude Include="UDP_Client.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragment01.glsl" />

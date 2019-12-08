@@ -24,18 +24,6 @@ struct sTriangle
 {
 	glm::vec3 v[3];
 };
-struct sAABB
-{
-	glm::vec3 minXYZ;
-	glm::vec3 maxXYZ;
-};
-
-struct sAOB
-{
-	glm::vec3 minXYZ;
-	glm::vec3 maxXYZ;
-	glm::mat3 matOrientation;
-};
 
 struct sTextureInfo
 {
@@ -96,9 +84,7 @@ public:
 	{
 		UNKNOWN_SHAPE,
 		SPHERE,
-		TRIANGLE,
-		AABB, 
-		AOB
+		TRIANGLE
 	};
 
 	// Allows me to point to anything (any type)
