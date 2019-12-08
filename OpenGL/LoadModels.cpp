@@ -4,10 +4,6 @@
 // Loading models was moved into this function
 void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 {
-	sModelDrawInfo terrainInfo;
-	terrainInfo.meshFileName = "Terrain.ply";
-	pTheVAOMeshManager->LoadModelIntoVAO(terrainInfo, shaderProgramID);
-
 	sModelDrawInfo sphereInfo;
 	sphereInfo.meshFileName = "Sphere_n_uv.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(sphereInfo, shaderProgramID);
@@ -15,6 +11,14 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 	sModelDrawInfo cubeInfo;
 	cubeInfo.meshFileName = "cube_n_uv.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(cubeInfo, shaderProgramID);
+
+	sModelDrawInfo playerInfo;
+	playerInfo.meshFileName = "player.ply";
+	pTheVAOMeshManager->LoadModelIntoVAO(playerInfo, shaderProgramID);
+
+	sModelDrawInfo shotInfo;
+	shotInfo.meshFileName = "shot.ply";
+	pTheVAOMeshManager->LoadModelIntoVAO(shotInfo, shaderProgramID);
 
 	sModelDrawInfo sphereInvertedNormalsInfo;
 	sphereInvertedNormalsInfo.meshFileName = "Sphere_n_uv_INVERTED_NORMALS.ply";
@@ -26,6 +30,10 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 	// Load the textures, too
 	::g_pTextureManager->SetBasePath("assets/textures");
 	::g_pTextureManager->Create2DTextureFromBMPFile("SandTexture.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("DarkCube.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("LightCube.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("GreyCube.bmp", true);
+
 
 	// Load the cube map
 	::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
@@ -46,8 +54,25 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 }
 
 // Loads the models we are drawing into the vector
-void LoadModelsIntoScene(std::vector<cMeshObject*> &vec_pObjectsToDraw)
+void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 {
+	// player object
+	{
+		cMeshObject* pPlayer = new cMeshObject();
+
+		pPlayer->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		pPlayer->setUniformScale(0.15f);
+		pPlayer->setSpecularPower(100.0f);
+		pPlayer->position = glm::vec3(-4.0f, 1.0f, -4.0f);
+
+		pPlayer->friendlyName = "Player";
+		pPlayer->meshName = "player.ply";
+		pPlayer->bIsVisible = true;
+
+		pPlayer->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(pPlayer);
+	}
+
 	// skybox
 	{
 		// (could also be a cube, or whatever)
@@ -64,27 +89,65 @@ void LoadModelsIntoScene(std::vector<cMeshObject*> &vec_pObjectsToDraw)
 		vec_pObjectsToDraw.push_back(pSkyBoxObject);
 	}
 
-	// cube
+	// cube - light texture
 	{
 		cMeshObject* pCube = new cMeshObject();
 
-		//pCube->position = glm::vec3(1000.0f, 0.0f, 0.0f);
 		pCube->setDiffuseColour(glm::vec3(0.1f, 0.1f, 0.1f));
 		pCube->setUniformScale(1.0f);
 		pCube->setSpecularPower(100.0f);
 
-		pCube->friendlyName = "Cube";
+		pCube->friendlyName = "CubeLight";
 		pCube->meshName = "cube_n_uv.ply";
 		pCube->bIsVisible = false;
 
-		//sTextureInfo sandTexture;
-		//sandTexture.name = "SandTexture.bmp";
-		//sandTexture.strength = 1.0f;
-		//pCube->vecTextures.push_back(sandTexture);
+		//sTextureInfo lightTexture;
+		//lightTexture.name = "LightCube.bmp";
+		//lightTexture.strength = 1.0f;
+		//pCube->vecTextures.push_back(lightTexture);
 
 		pCube->pDebugRenderer = ::g_pDebugRenderer;
 		vec_pObjectsToDraw.push_back(pCube);
 	}
+
+	// cube - dark texture
+	{
+		cMeshObject* pCube = new cMeshObject();
+
+		pCube->setDiffuseColour(glm::vec3(0.1f, 0.1f, 0.1f));
+		pCube->setUniformScale(1.0f);
+		pCube->setSpecularPower(100.0f);
+
+		pCube->friendlyName = "CubeDark";
+		pCube->meshName = "cube_n_uv.ply";
+		pCube->bIsVisible = false;
+
+		sTextureInfo darkTexture;
+		darkTexture.name = "GreyCube.bmp";
+		darkTexture.strength = 1.0f;
+		pCube->vecTextures.push_back(darkTexture);
+
+		pCube->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(pCube);
+	}
+
+	// projectile
+	{
+		cMeshObject* pBlast = new cMeshObject();
+
+		pBlast->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
+		pBlast->setSpecularPower(100.0f);
+		//pBlast->position = glm::vec3(-4.0f, 1.0f, -4.0f);
+
+		pBlast->friendlyName = "Shot";
+		pBlast->meshName = "shot.ply";
+		//pBlast->bIsVisible = true;
+
+		pBlast->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(pBlast);
+	}
+
+
 
 	{	// This sphere is the tiny little debug sphere
 		cMeshObject* pDebugSphere = new cMeshObject();

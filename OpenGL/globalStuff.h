@@ -23,10 +23,10 @@
 #include "Error/CErrorLog.h"
 #include "DebugRenderer/iDebugRenderer.h"
 
+extern bool fireProjectile;
+
 extern iDebugRenderer* g_pDebugRenderer;
-
 extern cCamera* g_pCamera;
-
 extern cVAOMeshManager* g_pVAOMeshManager;
 
 extern std::vector< cMeshObject* > g_vec_pObjectsToDraw;

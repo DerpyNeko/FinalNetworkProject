@@ -124,23 +124,36 @@ void ProcessAsyncKeys(GLFWwindow* window)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			::g_vec_pObjectsToDraw[2]->position.z += moveSpeed;
-			::g_vec_pObjectsToDraw[3]->position.z += moveSpeed;
+			::g_vec_pObjectsToDraw[0]->position.z += moveSpeed;
+			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
 		{
-			::g_vec_pObjectsToDraw[2]->position.z -= moveSpeed;
-			::g_vec_pObjectsToDraw[3]->position.z -= moveSpeed;
+			::g_vec_pObjectsToDraw[0]->position.z -= moveSpeed;
+			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	// "left"
 		{
-			::g_vec_pObjectsToDraw[2]->position.x += moveSpeed;
-			::g_vec_pObjectsToDraw[3]->position.x += moveSpeed;
+			::g_vec_pObjectsToDraw[0]->position.x += moveSpeed;
+			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	// "right"
 		{
-			::g_vec_pObjectsToDraw[2]->position.x -= moveSpeed;
-			::g_vec_pObjectsToDraw[3]->position.x -= moveSpeed;
+			::g_vec_pObjectsToDraw[0]->position.x -= moveSpeed;
+			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			fireProjectile = true;
+			std::cout << "fire" << std::endl;
+			//cMeshObject* pFloor = findObjectByFriendlyName("CubeLight");
+			//pFloor->bIsVisible = true;
+			//pFloor->position = ::g_vec_pObjectsToDraw[0]->position;
+
+			//pFloor->pDebugRenderer = ::g_pDebugRenderer;
+			//glm::mat4x4 matModel = glm::mat4(1.0f);
+			//DrawObject(pFloor, matModel, program);
+
 		}
 	}//if(AreAllModifiersUp(window)
 
@@ -172,8 +185,8 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		// Control (ctrl) key down? Move light
 	if (IsCtrlDown(window))
 	{
-				// Note: The "== GLFW_PRESS" isn't really needed as it's actually "1" 
-		// (so the if() treats the "1" as true...)
+		// Note: The "== GLFW_PRESS" isn't really needed as it's actually "1" 
+// (so the if() treats the "1" as true...)
 
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -267,12 +280,10 @@ void cursor_enter_callback(GLFWwindow* window, int entered)
 	if (entered)
 	{
 		::g_MouseIsInsideWindow = true;
-		std::cout << "Mouse moved indide window" << std::endl;
 	}
 	else
 	{
 		::g_MouseIsInsideWindow = false;
-		std::cout << "Mouse moved outside window" << std::endl;
 	}
 	return;
 }//cursor_enter_callback(...
