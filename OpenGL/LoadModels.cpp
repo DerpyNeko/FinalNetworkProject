@@ -58,19 +58,17 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 {
 	// player object
 	{
-		cMeshObject* pPlayer = new cMeshObject();
+		g_Player->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		g_Player->setUniformScale(0.15f);
+		g_Player->setSpecularPower(100.0f);
+		g_Player->position = glm::vec3(0.0f, 1.0f, 0.0f);
 
-		pPlayer->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
-		pPlayer->setUniformScale(0.15f);
-		pPlayer->setSpecularPower(100.0f);
-		pPlayer->position = glm::vec3(-4.0f, 1.0f, -4.0f);
+		g_Player->friendlyName = "Player";
+		g_Player->meshName = "player.ply";
+		g_Player->bIsVisible = true;
 
-		pPlayer->friendlyName = "Player";
-		pPlayer->meshName = "player.ply";
-		pPlayer->bIsVisible = true;
-
-		pPlayer->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pPlayer);
+		g_Player->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(g_Player);
 	}
 
 	// skybox
@@ -133,18 +131,15 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 
 	// projectile
 	{
-		cMeshObject* pBlast = new cMeshObject();
+		g_Bullet = new cMeshObject();
 
-		pBlast->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
-		pBlast->setSpecularPower(100.0f);
-		//pBlast->position = glm::vec3(-4.0f, 1.0f, -4.0f);
+		g_Bullet->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
+		g_Bullet->setSpecularPower(100.0f);
+		g_Bullet->meshName = "shot.ply";
+		g_Bullet->bIsVisible = false;
 
-		pBlast->friendlyName = "Shot";
-		pBlast->meshName = "shot.ply";
-		//pBlast->bIsVisible = true;
-
-		pBlast->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(pBlast);
+		g_Bullet->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(g_Bullet);
 	}
 
 

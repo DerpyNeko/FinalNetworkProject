@@ -23,7 +23,7 @@
 #include "Error/CErrorLog.h"
 #include "DebugRenderer/iDebugRenderer.h"
 
-extern bool fireProjectile;
+extern bool isFireProjectile;
 
 extern iDebugRenderer* g_pDebugRenderer;
 extern cCamera* g_pCamera;
@@ -48,6 +48,12 @@ cMeshObject* findObjectByUniqueID(unsigned int IDToFind);
 
 void DrawObject(cMeshObject* pCurrentMesh, glm::mat4x4 &matModel, GLuint shaderProgramID);
 
+extern cMeshObject* g_Player;
+extern cMeshObject* g_Bullet;
+extern glm::vec3 g_BulletPosition;
+
+enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
+extern Direction g_Direction;
 
 // *****************************************************************
 // This is part of the physics stuff

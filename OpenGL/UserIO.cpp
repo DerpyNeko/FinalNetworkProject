@@ -7,6 +7,8 @@
 // Ctrl				Model controls
 // Alt				Light controls
 
+Direction currentDirection = NONE;
+
 bool IsShiftDown(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) { return true; }
@@ -47,147 +49,83 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 
-	// Model controls
-	if (mods == GLFW_MOD_CONTROL)
-	{
-
-		if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
-		{
-			if (::g_ModelIndex + 1 < ::g_vec_pObjectsToDraw.size())
-			{
-				::g_ModelIndex++;
-			}
-			else
-			{
-				::g_ModelIndex = 0;
-			}
-
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS)
-		{
-			::g_vec_pObjectsToDraw[g_ModelIndex]->bIsWireFrame = !g_vec_pObjectsToDraw[g_ModelIndex]->bIsWireFrame;
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS)
-		{
-			::g_vec_pObjectsToDraw[g_ModelIndex]->vecTextures[0].strength += 0.5f;
-			::g_vec_pObjectsToDraw[g_ModelIndex]->vecTextures[1].strength -= 0.5f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
-		{
-			::g_vec_pObjectsToDraw[g_ModelIndex]->vecTextures[0].strength -= 0.5f;
-			::g_vec_pObjectsToDraw[g_ModelIndex]->vecTextures[1].strength += 0.5f;
-		}
-
-
-	}//if ( isShiftDownAlone(mods) )
-
-	// Light controls
-	if (mods == GLFW_MOD_ALT)
-	{
-
-		if (key == GLFW_KEY_GRAVE_ACCENT && action == GLFW_PRESS)
-		{
-			// Toggle the spheres on and off
-			//::g_bDrawDebugLightSpheres = !::g_bDrawDebugLightSpheres;
-			if (::g_LightIndex + 1 == ::g_Lights.size())
-			{
-				::g_LightIndex = 0;
-			}
-			else
-			{
-				::g_LightIndex++;
-			}
-		}
-	}
-
 	return;
 }
 
 void ProcessAsyncKeys(GLFWwindow* window)
 {
-	const float MOVE_SPEED_SLOW = 0.1f;
+	const float MOVE_SPEED_SLOW = 0.05f;
 	const float MOVE_SPEED_FAST = 1.0f;
 	const float CAMERA_TURN_SPEED = 0.1f;
 
 	float cameraMoveSpeed = ::g_pCamera->movementSpeed;
 	float moveSpeed = MOVE_SPEED_SLOW;
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	{
-		moveSpeed = MOVE_SPEED_FAST;
-	}
+	//if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	//{
+	//	moveSpeed = MOVE_SPEED_FAST;
+	//}
 
 	// If no keys are down, move the camera
 	if (AreAllModifiersUp(window))
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			::g_vec_pObjectsToDraw[0]->position.z += moveSpeed;
-			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+			if (g_Player->position.z < 10.25f)
+			{
+				g_Player->position.z += moveSpeed;
+				g_Player->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+				currentDirection = UP;
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
 		{
-			::g_vec_pObjectsToDraw[0]->position.z -= moveSpeed;
-			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+			if (g_Player->position.z > -0.25f)
+			{
+				g_Player->position.z -= moveSpeed;
+				g_Player->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+				currentDirection = DOWN;
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	// "left"
 		{
-			::g_vec_pObjectsToDraw[0]->position.x += moveSpeed;
-			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+			if (g_Player->position.x < 10.25f)
+			{
+				g_Player->position.x += moveSpeed;
+				g_Player->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+				currentDirection = LEFT;
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	// "right"
 		{
-			::g_vec_pObjectsToDraw[0]->position.x -= moveSpeed;
-			::g_vec_pObjectsToDraw[0]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+			if (g_Player->position.x > -0.25f)
+			{
+				g_Player->position.x -= moveSpeed;
+				g_Player->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+				currentDirection = RIGHT;
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			fireProjectile = true;
-			std::cout << "fire" << std::endl;
-			//cMeshObject* pFloor = findObjectByFriendlyName("CubeLight");
-			//pFloor->bIsVisible = true;
-			//pFloor->position = ::g_vec_pObjectsToDraw[0]->position;
-
-			//pFloor->pDebugRenderer = ::g_pDebugRenderer;
-			//glm::mat4x4 matModel = glm::mat4(1.0f);
-			//DrawObject(pFloor, matModel, program);
-
+			if (!isFireProjectile)
+			{
+				isFireProjectile = true;
+				std::cout << "fire" << std::endl;
+				g_BulletPosition = g_Player->position;
+				g_Direction = currentDirection;
+			}
 		}
+
+		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)	// "down"
+		{
+			std::cout << "Position: " << g_Player->position.x << "f, " << g_Player->position.y << "f, " << g_Player->position.z << "f" << std::endl;
+		}
+
 	}//if(AreAllModifiersUp(window)
 
-	if (IsShiftDown(window))
-	{
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			::g_vec_pObjectsToDraw[4]->position.z += moveSpeed;
-			::g_vec_pObjectsToDraw[5]->position.z += moveSpeed;
-		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
-		{
-			::g_vec_pObjectsToDraw[4]->position.z -= moveSpeed;
-			::g_vec_pObjectsToDraw[5]->position.z -= moveSpeed;
-		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	// "left"
-		{
-			::g_vec_pObjectsToDraw[4]->position.x += moveSpeed;
-			::g_vec_pObjectsToDraw[5]->position.x += moveSpeed;
-		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	// "right"
-		{
-			::g_vec_pObjectsToDraw[4]->position.x -= moveSpeed;
-			::g_vec_pObjectsToDraw[5]->position.x -= moveSpeed;
-		}
-	}//IsShiftDown(window)
-
-
-		// Control (ctrl) key down? Move light
+	// Control (ctrl) key down? Move light
 	if (IsCtrlDown(window))
 	{
-		// Note: The "== GLFW_PRESS" isn't really needed as it's actually "1" 
-// (so the if() treats the "1" as true...)
-
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
@@ -212,14 +150,20 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)	// "up"
 		{
 			::g_pCamera->MoveUpDown_Y(-cameraMoveSpeed);
-			//			::g_pFlyCamera->Roll_CW_CCW( +cameraSpeed );
+			//::g_pCamera->Roll_CW_CCW( +cameraMoveSpeed );
 		}
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)	// "down"
 		{
 			//			g_CameraEye.y -= cameraSpeed;
 			::g_pCamera->MoveUpDown_Y(+cameraMoveSpeed);
-			//			::g_pFlyCamera->Roll_CW_CCW( -cameraSpeed );
+			//::g_pCamera->Roll_CW_CCW( -cameraMoveSpeed );
 		}
+		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)	// "down"
+		{
+			glm::vec3 at = ::g_pCamera->getCameraDirection();
+			std::cout << ::g_pCamera->eye.x << " " << ::g_pCamera->eye.y << " " << ::g_pCamera->eye.z << " AT: " << at.x << " " << at.y << " " << at.z;
+		}
+
 
 	}//if(!IsShiftDown(window) )	
 

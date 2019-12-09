@@ -34,7 +34,13 @@ cCamera* g_pCamera = NULL;
 std::vector<cMeshObject*> g_vec_pObjectsToDraw;
 std::vector<sLight*> g_Lights;
 
-bool fireProjectile = false;
+bool isFireProjectile = false;
+cMeshObject* g_Player = new cMeshObject();
+cMeshObject* g_Bullet = new cMeshObject();
+glm::vec3 g_BulletPosition = {};
+double startTime = 0.0;
+double currentTime = 0.0;
+Direction g_Direction = NONE;
 
 int g_ModelIndex = 0;
 bool g_bDrawDebugLightSpheres = false;
@@ -219,7 +225,7 @@ int main(void)
 
 	// Camera creation
 	::g_pCamera = new cCamera();
-	g_pCamera->eye = { 0.0f, 50.0f, 0.0f };
+	g_pCamera->eye = { 4.74339f, 26.1162f, 2.86167f };
 	//g_pCamera->setCameraAt(glm::vec3(0.0f, -1.0f, 0.0f));
 
 	LoadModelTypes(::g_pVAOMeshManager, program);
@@ -351,9 +357,9 @@ int main(void)
 
 		// Add floor of cubes
 		int textureCount = 0;
-		for (int i = -4; i < 5; i++)
+		for (int i = 0; i < 11; i++)
 		{
-			for (int j = -4; j < 5; j++)
+			for (int j = 0; j < 11; j++)
 			{
 				cMeshObject* pFloor = findObjectByFriendlyName("CubeLight");
 				pFloor->bIsVisible = true;
@@ -363,7 +369,7 @@ int main(void)
 				glm::mat4x4 matModel = glm::mat4(1.0f);
 				DrawObject(pFloor, matModel, program);
 
-				if (textureCount == 80)
+				if (textureCount == 120)
 					textureCount++;
 
 				if (textureCount % 2 == 0)
@@ -398,27 +404,51 @@ int main(void)
 		}
 
 		// projectile
-		if (fireProjectile)
+		if (isFireProjectile)
 		{
-			void DoPhysicsCheckpointNumberFour();
+			//void DoPhysicsCheckpointNumberFour();
 
+			g_Bullet->bIsVisible = true;
+			g_Bullet->position = glm::vec3(g_BulletPosition.x, g_BulletPosition.y, g_BulletPosition.z);
+			g_Bullet->setUniformScale(0.2f);
+			//g_Bullet->adjMeshOrientationQ(::g_vec_pObjectsToDraw[0]->getQOrientation());
 
+			g_Bullet->pDebugRenderer = ::g_pDebugRenderer;
+			glm::mat4x4 matModel = glm::mat4(1.0f);
+			DrawObject(g_Bullet, matModel, program);
 
+			if(startTime == 0.0)
+				startTime = glfwGetTime();
 
-			//cMeshObject* pShot = findObjectByFriendlyName("Blast");
-			//pShot->bIsVisible = true;
-			//pShot->position = glm::vec3(-4.0f, 1.0f, -4.0f);
-			//pShot->setUniformScale(1.0f);
-			//pShot->adjMeshOrientationQ(::g_vec_pObjectsToDraw[0]->getQOrientation());
+			currentTime = glfwGetTime();
+			if (currentTime >= startTime + 2.0)
+			{
+				g_Bullet->bIsVisible = false;
+				g_Bullet->position = g_Player->position;
+				startTime = 0.0;
+				isFireProjectile = !isFireProjectile;
+			}
+			else
+			{
+				if (g_Direction == UP)
+				{
+					g_BulletPosition.z += 0.08;
+				}
+				else if (g_Direction == DOWN)
+				{
+					g_BulletPosition.z -= 0.08;
+				}
+				else if (g_Direction == LEFT)
+				{
+					g_BulletPosition.x += 0.08;
+				}
+				else if (g_Direction == RIGHT)
+				{
+					g_BulletPosition.x -= 0.08;
+				}
+			}
 
-			//pShot->pDebugRenderer = ::g_pDebugRenderer;
-			//glm::mat4x4 matModel = glm::mat4(1.0f);
-			//DrawObject(pShot, matModel, program);
-
-			fireProjectile = !fireProjectile;
 		}
-
-
 
 		// Draw all the solid objects in the "scene"
 		for (unsigned int objIndex = 0; objIndex != (unsigned int)vec_pSolidObject.size(); objIndex++)
@@ -441,8 +471,8 @@ int main(void)
 		}
 
 		// High res timer (likely in ms or ns)
-		double currentTime = glfwGetTime();
-		double deltaTime = currentTime - lastTime;
+		//double currentTime = glfwGetTime();
+		//double deltaTime = currentTime - lastTime;
 		
 		//::g_pDebugRendererACTUAL->RenderDebugObjects(matView, matProjection, deltaTime);
 
@@ -585,37 +615,27 @@ void BubbleSort(std::vector<cMeshObject*>& vec)
 	}
 }
 
-// This is global because I need to update this with the keyboard
-float g_ProjectileInitialVelocity = 1.0f;
-
 void DoPhysicsCheckpointNumberFour()
 {
-	cMeshObject* pProjectile = ::findObjectByFriendlyName("Blast");
+	cMeshObject* pProjectile = ::findObjectByFriendlyName("Shot");
 
-	glm::vec3 projVelWorldSpace = ::g_pCamera->getCameraDirection() * ::g_ProjectileInitialVelocity;
-	glm::vec3 projPosition = ::g_vec_pObjectsToDraw[0]->position;
-	glm::vec3 projAccel = glm::vec3(0.0f);
+	glm::vec3 projPosition = g_Player->position;
+	glm::vec3 projAccel = glm::vec3(1.0f);
 
 	float timeStep = 0.25f;
-	float howLongWeGonnaRun = 10.0f;
+	float howLongWeGonnaRun = 2.0f;
 
 	for (float time = 0.0; time < howLongWeGonnaRun; time += timeStep)
 	{
-		// Update velocity from acceleration...
-		projVelWorldSpace.x = projVelWorldSpace.x + (projAccel.x * timeStep);
-		projVelWorldSpace.y = projVelWorldSpace.y + (projAccel.y * timeStep);
-		projVelWorldSpace.z = projVelWorldSpace.z + (projAccel.z * timeStep);
-
 		// Update position from velocity
-		projPosition.x = projPosition.x + (projVelWorldSpace.x * timeStep);
-		projPosition.y = projPosition.y + (projVelWorldSpace.y * timeStep);
-		projPosition.z = projPosition.z + (projVelWorldSpace.z * timeStep);
+		projPosition.x = projPosition.x + (projAccel.x * timeStep);
+		//projPosition.z = projPosition.z + (projAccel.z * timeStep);
 
 		// Draw a sphere at each of these locations...
 		pProjectile->position = projPosition;
 		pProjectile->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
 		pProjectile->bIsVisible = true;
-		pProjectile->setUniformScale(0.75f);
+		pProjectile->setUniformScale(1.0f);
 
 		glm::mat4 matWorld = glm::mat4(1.0f);
 		GLuint program = pShaderManager->getIDFromFriendlyName("BasicUberShader");
