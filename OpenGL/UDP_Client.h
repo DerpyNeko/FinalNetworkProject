@@ -29,7 +29,7 @@ public:
 
 	void Send(char* data, int numBytes);
 
-	void SetPosition(int id, float& x, float& y);
+	void SetPosition(int id, float& x, float& z);
 private:
 	void SetNonBlocking(SOCKET socket);
 	void Recv(void);

@@ -3,8 +3,14 @@
 #include <bitset>
 #include <iostream>
 
+struct Bullet {
+	float x, z;
+};
+
 struct Player {
-	float x, y;
+	float x, z;
+	bool isShootingBullet;
+	Bullet bullet;
 };
 
 std::vector<Player> mPlayers;
@@ -21,16 +27,16 @@ void _PrintWSAError(const char* file, int line)
 	LocalFree(s);
 }
 
-void UDPClient::SetPosition(int id, float& x, float& y)
+void UDPClient::SetPosition(int id, float& x, float& z)
 {
 	x = mPlayers[id].x;
-	y = mPlayers[id].y;
+	z = mPlayers[id].z;
 }
 
 UDPClient::UDPClient(void)
 	: mServerSocket(INVALID_SOCKET)
 {
-	mPlayers.resize(8);
+	mPlayers.resize(4);
 
 	WSAData		WSAData;
 	int			iResult;
@@ -40,6 +46,7 @@ UDPClient::UDPClient(void)
 	// Step #0 Initialize WinSock
 	iResult = WSAStartup(MAKEWORD(2, 2), &WSAData);
 	if (iResult != 0) {
+		std::cout << "Erroring in initalization" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -56,6 +63,7 @@ void UDPClient::SetNonBlocking(SOCKET socket)
 	ULONG NonBlock = 1;
 	int result = ioctlsocket(socket, FIONBIO, &NonBlock);
 	if (result == SOCKET_ERROR) {
+		std::cout << "Erroring in set non blocking" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -65,6 +73,7 @@ void UDPClient::CreateSocket(string ip, int port)
 {
 	mServerSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (mServerSocket == SOCKET_ERROR) {
+		std::cout << "Erroring in creating socket" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -74,7 +83,7 @@ void UDPClient::CreateSocket(string ip, int port)
 	si_other.sin_port = htons(port);
 	si_other.sin_addr.s_addr = inet_addr(ip.c_str());
 
-	//SetNonBlocking(mServerSocket);
+	SetNonBlocking(mServerSocket);
 }
 
 void UDPClient::Update(void)
@@ -93,6 +102,7 @@ void UDPClient::Recv(void)
 		if (WSAGetLastError() == WSAEWOULDBLOCK) {
 			return;
 		}
+		std::cout << "Erroring in recv" << std::endl;
 		PrintWSAError();
 
 		// For a TCP connection you would close this socket, and remove it from 
@@ -107,12 +117,12 @@ void UDPClient::Recv(void)
 	unsigned int numPlayers;
 	memcpy(&numPlayers, &(buffer[0]), sizeof(unsigned int));
 
-	float x, y;
+	float x, z;
 	for (int i = 0; i < numPlayers; i++) {
 		memcpy(&x, &(buffer[i * 8 + 4]), sizeof(float));
-		memcpy(&y, &(buffer[i * 8 + 8]), sizeof(float));
+		memcpy(&z, &(buffer[i * 8 + 8]), sizeof(float));
 		mPlayers[i].x = x;
-		mPlayers[i].y = y;
+		mPlayers[i].z = z;
 	}
 
 	//unsigned short port = si_other.sin_port;
@@ -120,7 +130,7 @@ void UDPClient::Recv(void)
 
 	printf("%d players: {", numPlayers);
 	for (int i = 0; i < numPlayers; i++) {
-		printf(" {x: %.2f, y: %.2f}", mPlayers[i].x, mPlayers[i].y);
+		printf(" {x: %.2f, z: %.2f}", mPlayers[i].x, mPlayers[i].z);
 	}
 	printf(" }\n");
 }
@@ -132,6 +142,7 @@ void UDPClient::Send(char* data, int numBytes)
 
 	if (result == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) return;
+		std::cout << "Erroring in send" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -143,3 +154,21 @@ void UDPClient::Send(char* data, int numBytes)
 
 	// printf("Number of bytes sent: %d\n", result);
 }
+
+// Sends message to client
+//void SendToClient(SOCKET connection, int id, std::string serializedString)
+//{
+//	// Packet -> [requestId][contentSize][content]
+//	std::vector<char> packet;
+//	packet.push_back(id);
+//	packet.push_back(serializedString.length());
+//
+//	const char* temp = serializedString.c_str();
+//	for (int i = 0; i < serializedString.length(); i++)
+//	{
+//		packet.push_back(temp[i]);
+//	}
+//
+//	send(connection, &packet[0], packet.size(), 0);
+//	Sleep(10);
+//}

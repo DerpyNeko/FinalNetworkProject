@@ -5,12 +5,13 @@
 
 #include <ctime>
 
+#include <iostream>
 
 struct Player {
 	unsigned short port; // their id;
 	struct sockaddr_in si_other;
 	float x;
-	float y;
+	float z;
 	bool up, down, right, left;
 };
 
@@ -121,10 +122,17 @@ void UDPServer::Update(void)
 void UDPServer::UpdatePlayers(void)
 {
 	for (int i = 0; i < numPlayersConnected; i++) {
-		if (mPlayers[i].up) mPlayers[i].y += 10.0f * elapsed_secs;
-		if (mPlayers[i].down) mPlayers[i].y -= 10.0f * elapsed_secs;
-		if (mPlayers[i].right) mPlayers[i].x += 10.0f * elapsed_secs;
-		if (mPlayers[i].left) mPlayers[i].x -= 10.0f * elapsed_secs;
+		//if (mPlayers[i].up) mPlayers[i].z += 10.0f * elapsed_secs;
+		//if (mPlayers[i].down) mPlayers[i].z -= 10.0f * elapsed_secs;
+		//if (mPlayers[i].right) mPlayers[i].x += 10.0f * elapsed_secs;
+		//if (mPlayers[i].left) mPlayers[i].x -= 10.0f * elapsed_secs;
+		//TODO: Fix this speed
+		if (mPlayers[i].up) mPlayers[i].z += 0.05f;
+		if (mPlayers[i].down) mPlayers[i].z -= 0.05f;
+		if (mPlayers[i].right) mPlayers[i].x += 0.05f;
+		if (mPlayers[i].left) mPlayers[i].x -= 0.05f;
+
+		std::cout << mPlayers[i].x << ", " << mPlayers[i].z << std::endl;
 	}
 }
 
@@ -139,7 +147,7 @@ void UDPServer::BroadcastUpdate(void)
 
 	for (int i = 0; i < numPlayersConnected; i++) {
 		float x = mPlayers[i].x;
-		float y = mPlayers[i].y;
+		float y = mPlayers[i].z;
 		memcpy(&(buffer[i * 8 + 4]), &x, sizeof(float));
 		memcpy(&(buffer[i * 8 + 8]), &y, sizeof(float));
 	}
@@ -160,7 +168,7 @@ Player* GetPlayerByPort(unsigned short port, struct sockaddr_in si_other)
 	// Otherwise create a new player, and return that one!
 	mPlayers[numPlayersConnected].port = port;
 	mPlayers[numPlayersConnected].x = 0.0f;
-	mPlayers[numPlayersConnected].y = 0.0f;
+	mPlayers[numPlayersConnected].z = 0.0f;
 	mPlayers[numPlayersConnected].si_other = si_other;
 	return &(mPlayers[numPlayersConnected++]);
 }

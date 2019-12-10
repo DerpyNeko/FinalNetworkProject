@@ -58,17 +58,24 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 {
 	// player object
 	{
-		g_Player->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
-		g_Player->setUniformScale(0.15f);
-		g_Player->setSpecularPower(100.0f);
-		g_Player->position = glm::vec3(0.0f, 1.0f, 0.0f);
+		for (int x = 0; x < 11; x = x + 10)
+		{
+			for (int z = 0; z < 11; z = z + 10)
+			{
+				cMeshObject* player = new cMeshObject();
+				player->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+				player->setUniformScale(0.15f);
+				player->setSpecularPower(100.0f);
+				player->position = glm::vec3((float)x, 1.0f, (float)z);
+				std::cout << "Starting Position: " << player->position.x << ", " << player->position.y << ", " << player->position.z << std::endl;
 
-		g_Player->friendlyName = "Player";
-		g_Player->meshName = "player.ply";
-		g_Player->bIsVisible = true;
+				player->meshName = "player.ply";
+				player->bIsVisible = true;
 
-		g_Player->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(g_Player);
+				vec_pObjectsToDraw.push_back(player);
+				g_Players.push_back(player);
+			}
+		}
 	}
 
 	// skybox

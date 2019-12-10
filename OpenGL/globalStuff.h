@@ -48,12 +48,13 @@ cMeshObject* findObjectByUniqueID(unsigned int IDToFind);
 
 void DrawObject(cMeshObject* pCurrentMesh, glm::mat4x4 &matModel, GLuint shaderProgramID);
 
-extern cMeshObject* g_Player;
+extern std::vector<cMeshObject*> g_Players;
 extern cMeshObject* g_Bullet;
 extern glm::vec3 g_BulletPosition;
 
 enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
-extern Direction g_Direction;
+extern Direction g_PlayerDirection;
+extern Direction g_BulletDirection;
 
 // *****************************************************************
 // This is part of the physics stuff

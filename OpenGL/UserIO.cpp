@@ -7,8 +7,6 @@
 // Ctrl				Model controls
 // Alt				Light controls
 
-Direction currentDirection = NONE;
-
 bool IsShiftDown(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) { return true; }
@@ -71,38 +69,34 @@ void ProcessAsyncKeys(GLFWwindow* window)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			if (g_Player->position.z < 10.25f)
+			if (g_Players[0]->position.z < 10.25f)
 			{
-				g_Player->position.z += moveSpeed;
-				g_Player->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
-				currentDirection = UP;
+				g_Players[0]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+				g_PlayerDirection = UP;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
 		{
-			if (g_Player->position.z > -0.25f)
+			if (g_Players[0]->position.z > -0.25f)
 			{
-				g_Player->position.z -= moveSpeed;
-				g_Player->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
-				currentDirection = DOWN;
+				g_Players[0]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+				g_PlayerDirection = DOWN;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	// "left"
 		{
-			if (g_Player->position.x < 10.25f)
+			if (g_Players[0]->position.x < 10.25f)
 			{
-				g_Player->position.x += moveSpeed;
-				g_Player->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
-				currentDirection = LEFT;
+				g_Players[0]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+				g_PlayerDirection = LEFT;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	// "right"
 		{
-			if (g_Player->position.x > -0.25f)
+			if (g_Players[0]->position.x > -0.25f)
 			{
-				g_Player->position.x -= moveSpeed;
-				g_Player->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
-				currentDirection = RIGHT;
+				g_Players[0]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+				g_PlayerDirection = RIGHT;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -111,14 +105,14 @@ void ProcessAsyncKeys(GLFWwindow* window)
 			{
 				isFireProjectile = true;
 				std::cout << "fire" << std::endl;
-				g_BulletPosition = g_Player->position;
-				g_Direction = currentDirection;
+				g_BulletPosition = g_Players[0]->position;
+				g_BulletDirection = g_PlayerDirection;
 			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)	// "down"
 		{
-			std::cout << "Position: " << g_Player->position.x << "f, " << g_Player->position.y << "f, " << g_Player->position.z << "f" << std::endl;
+			std::cout << "Position: " << g_Players[0]->position.x << "f, " << g_Players[0]->position.y << "f, " << g_Players[0]->position.z << "f" << std::endl;
 		}
 
 	}//if(AreAllModifiersUp(window)

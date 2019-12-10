@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 
 			if (ch == 27) break;
 		}
-	//	server.Update();
+		server.Update();
 	}
 
 	return 0;

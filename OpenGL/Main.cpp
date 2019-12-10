@@ -35,12 +35,13 @@ std::vector<cMeshObject*> g_vec_pObjectsToDraw;
 std::vector<sLight*> g_Lights;
 
 bool isFireProjectile = false;
-cMeshObject* g_Player = new cMeshObject();
+std::vector<cMeshObject*> g_Players;
 cMeshObject* g_Bullet = new cMeshObject();
 glm::vec3 g_BulletPosition = {};
 double startTime = 0.0;
 double currentTime = 0.0;
-Direction g_Direction = NONE;
+Direction g_PlayerDirection = NONE;
+Direction g_BulletDirection = NONE;
 
 int g_ModelIndex = 0;
 bool g_bDrawDebugLightSpheres = false;
@@ -95,38 +96,11 @@ void ClientThread()
 	//}
 }
 
-void RunConsole(void)
+int main(void)
 {
 	UDPClient client;
 	client.CreateSocket("127.0.0.1", 5150);
-
 	std::cout << "Connected!" << std::endl;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL); //Create a thread
-
-	//int ch;
-	//bool run = true;
-	//while (run)
-	//{
-	//	if (_kbhit())
-	//	{
-	//		ch = _getch();
-
-	//		switch (ch)
-	//		{
-	//		case 27: run = false; break;
-	//		default:
-	//			client.Send((char*)(&ch), 1);
-	//			break;
-	//		}
-	//	}
-	//	client.Update();
-	//}
-}
-
-
-int main(void)
-{
-	RunConsole();
 
 	GLFWwindow* window;
 
@@ -406,7 +380,7 @@ int main(void)
 		// projectile
 		if (isFireProjectile)
 		{
-			//void DoPhysicsCheckpointNumberFour();
+			// ONLY SHOOTS IF A DIRECTION KEY IS PRESSED + SPACE
 
 			g_Bullet->bIsVisible = true;
 			g_Bullet->position = glm::vec3(g_BulletPosition.x, g_BulletPosition.y, g_BulletPosition.z);
@@ -424,31 +398,49 @@ int main(void)
 			if (currentTime >= startTime + 2.0)
 			{
 				g_Bullet->bIsVisible = false;
-				g_Bullet->position = g_Player->position;
+				g_Bullet->position = g_Players[0]->position;
 				startTime = 0.0;
 				isFireProjectile = !isFireProjectile;
 			}
 			else
 			{
-				if (g_Direction == UP)
+				if (g_BulletDirection == UP)
 				{
 					g_BulletPosition.z += 0.08;
 				}
-				else if (g_Direction == DOWN)
+				else if (g_BulletDirection == DOWN)
 				{
 					g_BulletPosition.z -= 0.08;
 				}
-				else if (g_Direction == LEFT)
+				else if (g_BulletDirection == LEFT)
 				{
 					g_BulletPosition.x += 0.08;
 				}
-				else if (g_Direction == RIGHT)
+				else if (g_BulletDirection == RIGHT)
 				{
 					g_BulletPosition.x -= 0.08;
 				}
 			}
-
 		}
+
+		char input[4];
+		input[0] = g_PlayerDirection == UP ? 1 : 0;
+		input[1] = g_PlayerDirection == DOWN ? 1 : 0;
+		input[2] = g_PlayerDirection == LEFT ? 1 : 0;
+		input[3] = g_PlayerDirection == RIGHT ? 1 : 0;
+
+		client.Send(input, 4);
+
+		client.Update();
+		
+		g_PlayerDirection = NONE;
+
+		//for (int i = 0; i < 4; i++) {
+		//	std::cout << "Before Set player[" << i << "] Position: " << g_Players[i]->position.x << ", " << g_Players[i]->position.y << ", " << g_Players[i]->position.z << std::endl;
+		//	client.SetPosition(i, g_Players[i]->position.x, g_Players[i]->position.z);
+		//	std::cout << "After Set player[" << i << "] Position: " << g_Players[i]->position.x << ", " << g_Players[i]->position.y << ", " << g_Players[i]->position.z << std::endl;
+		//}
+		client.SetPosition(0, g_Players[0]->position.x, g_Players[0]->position.z);
 
 		// Draw all the solid objects in the "scene"
 		for (unsigned int objIndex = 0; objIndex != (unsigned int)vec_pSolidObject.size(); objIndex++)
@@ -619,7 +611,7 @@ void DoPhysicsCheckpointNumberFour()
 {
 	cMeshObject* pProjectile = ::findObjectByFriendlyName("Shot");
 
-	glm::vec3 projPosition = g_Player->position;
+	glm::vec3 projPosition = g_Players[0]->position;
 	glm::vec3 projAccel = glm::vec3(1.0f);
 
 	float timeStep = 0.25f;
@@ -644,7 +636,6 @@ void DoPhysicsCheckpointNumberFour()
 		pProjectile->bIsVisible = false;
 
 	}// for ( double time = 0.0;...
-
 
 	return;
 }
