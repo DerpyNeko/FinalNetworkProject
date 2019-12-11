@@ -3,17 +3,20 @@
 #include <bitset>
 #include <iostream>
 
-struct Bullet {
-	float x, z;
-};
+#include "FinalProject.pb.h"
+using namespace FinalProject;
 
-struct Player {
-	float x, z;
-	bool isShootingBullet;
-	Bullet bullet;
-};
+//struct Bullet {
+//	float x, z;
+//};
 
-std::vector<Player> mPlayers;
+//struct Player {
+//	float x, z;
+//	bool isShootingBullet;
+//	Bullet bullet;
+//};
+
+std::vector<Player*> mPlayers;
 
 void _PrintWSAError(const char* file, int line)
 {
@@ -29,14 +32,14 @@ void _PrintWSAError(const char* file, int line)
 
 void UDPClient::SetPosition(int id, float& x, float& z)
 {
-	x = mPlayers[id].x;
-	z = mPlayers[id].z;
+	std::cout << "PositionID: " << id << std::endl;
+	x = mPlayers[id]->position(0);
+	z = mPlayers[id]->position(1);
 }
 
-UDPClient::UDPClient(void)
-	: mServerSocket(INVALID_SOCKET)
+UDPClient::UDPClient(void) :mServerSocket(INVALID_SOCKET)
 {
-	mPlayers.resize(4);
+	//mPlayers.resize(4);
 
 	WSAData		WSAData;
 	int			iResult;
@@ -49,6 +52,21 @@ UDPClient::UDPClient(void)
 		std::cout << "Erroring in initalization" << std::endl;
 		PrintWSAError();
 		return;
+	}
+
+	for (int x = 0; x < 11; x = x + 10)
+	{
+		for (int z = 0; z < 11; z = z + 10)
+		{
+			Player* newPlayer = new Player();
+			newPlayer->set_state(0);
+			newPlayer->add_position(x);
+			newPlayer->add_position(z);
+			newPlayer->add_velocity(0);
+			newPlayer->add_orientation(0);
+
+			mPlayers.push_back(newPlayer);
+		}
 	}
 }
 
@@ -95,9 +113,10 @@ void UDPClient::Recv(void)
 {
 	struct sockaddr_in si_other;
 	int slen = sizeof(si_other);
-	char buffer[512];
+	//char buffer[512];
+	std::vector<char> packet(512);
 
-	int result = recvfrom(mServerSocket, buffer, 512, 0, (struct sockaddr*) & si_other, &slen);
+	int result = recvfrom(mServerSocket, &packet[0], packet.size(), 0, (struct sockaddr*) & si_other, &slen);
 	if (result == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) {
 			return;
@@ -108,21 +127,32 @@ void UDPClient::Recv(void)
 		// For a TCP connection you would close this socket, and remove it from 
 		// your list of connections. For UDP we will clear our buffer, and just
 		// ignore this.
-		memset(buffer, '\0', 512);
+		//memset(buffer, '\0', 512);
+		packet.clear();
 		return;
 	}
 
 	// NumPlayers
 	// Each player: { x, y }
-	unsigned int numPlayers;
-	memcpy(&numPlayers, &(buffer[0]), sizeof(unsigned int));
+	unsigned int numPlayers = 1;
+	//memcpy(&numPlayers, &(buffer[0]), sizeof(unsigned int));
+
+	int length = packet[0];
+	std::string packetContents;
+
+	for (int i = 1; i <= length + 1; i++)
+	{
+		packetContents += packet[i];
+	}
+
+	GameScene* scene = new GameScene();
+	scene->ParseFromString(packetContents);
 
 	float x, z;
 	for (int i = 0; i < numPlayers; i++) {
-		memcpy(&x, &(buffer[i * 8 + 4]), sizeof(float));
-		memcpy(&z, &(buffer[i * 8 + 8]), sizeof(float));
-		mPlayers[i].x = x;
-		mPlayers[i].z = z;
+		
+		mPlayers[i]->set_position(0, scene->players(i).position(0));
+		mPlayers[i]->set_position(1, scene->players(i).position(1));
 	}
 
 	//unsigned short port = si_other.sin_port;
@@ -130,15 +160,36 @@ void UDPClient::Recv(void)
 
 	printf("%d players: {", numPlayers);
 	for (int i = 0; i < numPlayers; i++) {
-		printf(" {x: %.2f, z: %.2f}", mPlayers[i].x, mPlayers[i].z);
+		printf(" {x: %.2f, z: %.2f}", mPlayers[i]->position(0), mPlayers[i]->position(1));
 	}
 	printf(" }\n");
 }
 
-void UDPClient::Send(char* data, int numBytes)
+void UDPClient::SendInput(int direction)
 {
-	int result = sendto(mServerSocket, data, numBytes, 0,
-		(struct sockaddr*) & si_other, sizeof(si_other));
+	UserInput* input = new UserInput();
+	input->set_id(0);
+	input->set_input(direction);
+	std::string serializedResult = input->SerializeAsString();
+	Send(serializedResult);
+}
+
+void UDPClient::Send(std::string serializedString)
+{
+	// Packet -> [contentSize][content]
+	std::vector<char> packet;
+	//packet.push_back(id);
+	packet.push_back(serializedString.length());
+	
+	const char* temp = serializedString.c_str();
+	for (int i = 0; i < serializedString.length(); i++)
+	{
+		packet.push_back(temp[i]);
+	}
+	
+	int result = sendto(mServerSocket, &packet[0], packet.size(), 0, (struct sockaddr*) & si_other, sizeof(si_other));
+	//	Sleep(10);
+//	int result = sendto(mServerSocket, data, numBytes, 0, (struct sockaddr*) & si_other, sizeof(si_other));
 
 	if (result == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) return;

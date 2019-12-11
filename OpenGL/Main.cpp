@@ -423,13 +423,13 @@ int main(void)
 			}
 		}
 
-		char input[4];
-		input[0] = g_PlayerDirection == UP ? 1 : 0;
-		input[1] = g_PlayerDirection == DOWN ? 1 : 0;
-		input[2] = g_PlayerDirection == LEFT ? 1 : 0;
-		input[3] = g_PlayerDirection == RIGHT ? 1 : 0;
+		//char input[4];
+		//input[0] = g_PlayerDirection == UP ? 1 : 0;
+		//input[1] = g_PlayerDirection == DOWN ? 1 : 0;
+		//input[2] = g_PlayerDirection == LEFT ? 1 : 0;
+		//input[3] = g_PlayerDirection == RIGHT ? 1 : 0;
 
-		client.Send(input, 4);
+		client.SendInput(g_PlayerDirection);
 
 		client.Update();
 		

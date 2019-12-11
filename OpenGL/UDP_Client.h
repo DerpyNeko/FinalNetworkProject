@@ -27,7 +27,8 @@ public:
 	void CreateSocket(string ip, int port);
 	void Update(void);
 
-	void Send(char* data, int numBytes);
+	void SendInput(int direction);
+	void Send(std::string serializedString);
 
 	void SetPosition(int id, float& x, float& z);
 private:
