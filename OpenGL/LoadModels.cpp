@@ -74,6 +74,19 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 
 				vec_pObjectsToDraw.push_back(player);
 				g_Players.push_back(player);
+
+				cMeshObject* bullet = new cMeshObject();
+
+				bullet->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
+				bullet->setSpecularPower(100.0f);
+				bullet->position = glm::vec3((float)x, 1.0f, (float)z);
+				bullet->setUniformScale(0.2f);
+				bullet->meshName = "shot.ply";
+				bullet->bIsVisible = true;
+
+				bullet->pDebugRenderer = ::g_pDebugRenderer;
+				vec_pObjectsToDraw.push_back(bullet);
+				g_Bullets.push_back(bullet);
 			}
 		}
 	}
@@ -135,21 +148,6 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 		pCube->pDebugRenderer = ::g_pDebugRenderer;
 		vec_pObjectsToDraw.push_back(pCube);
 	}
-
-	// projectile
-	{
-		g_Bullet = new cMeshObject();
-
-		g_Bullet->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
-		g_Bullet->setSpecularPower(100.0f);
-		g_Bullet->meshName = "shot.ply";
-		g_Bullet->bIsVisible = false;
-
-		g_Bullet->pDebugRenderer = ::g_pDebugRenderer;
-		vec_pObjectsToDraw.push_back(g_Bullet);
-	}
-
-
 
 	{	// This sphere is the tiny little debug sphere
 		cMeshObject* pDebugSphere = new cMeshObject();

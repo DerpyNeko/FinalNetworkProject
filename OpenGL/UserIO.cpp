@@ -69,34 +69,34 @@ void ProcessAsyncKeys(GLFWwindow* window)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			if (g_Players[0]->position.z < 10.25f)
+			if (g_Players[g_PlayerNumber]->position.z < 10.25f)
 			{
-				g_Players[0]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
-				g_PlayerDirection = UP;
+				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+				g_PlayerInput = UP;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
 		{
-			if (g_Players[0]->position.z > -0.25f)
+			if (g_Players[g_PlayerNumber]->position.z > -0.25f)
 			{
-				g_Players[0]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
-				g_PlayerDirection = DOWN;
+				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+				g_PlayerInput = DOWN;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)	// "left"
 		{
-			if (g_Players[0]->position.x < 10.25f)
+			if (g_Players[g_PlayerNumber]->position.x < 10.25f)
 			{
-				g_Players[0]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
-				g_PlayerDirection = LEFT;
+				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+				g_PlayerInput = LEFT;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)	// "right"
 		{
-			if (g_Players[0]->position.x > -0.25f)
+			if (g_Players[g_PlayerNumber]->position.x > -0.25f)
 			{
-				g_Players[0]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
-				g_PlayerDirection = RIGHT;
+				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+				g_PlayerInput = RIGHT;
 			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -105,14 +105,14 @@ void ProcessAsyncKeys(GLFWwindow* window)
 			{
 				isFireProjectile = true;
 				std::cout << "fire" << std::endl;
-				g_BulletPosition = g_Players[0]->position;
-				g_BulletDirection = g_PlayerDirection;
+				g_BulletPosition = g_Players[g_PlayerNumber]->position;
+				g_BulletDirection = g_PlayerInput;
 			}
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)	// "down"
 		{
-			std::cout << "Position: " << g_Players[0]->position.x << "f, " << g_Players[0]->position.y << "f, " << g_Players[0]->position.z << "f" << std::endl;
+			std::cout << "Position: " << g_Players[g_PlayerNumber]->position.x << "f, " << g_Players[g_PlayerNumber]->position.y << "f, " << g_Players[g_PlayerNumber]->position.z << "f" << std::endl;
 		}
 
 	}//if(AreAllModifiersUp(window)

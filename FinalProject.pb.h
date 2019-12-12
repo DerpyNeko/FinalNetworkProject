@@ -47,7 +47,7 @@ struct TableStruct_FinalProject_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -64,6 +64,9 @@ extern GameSceneDefaultTypeInternal _GameScene_default_instance_;
 class Player;
 class PlayerDefaultTypeInternal;
 extern PlayerDefaultTypeInternal _Player_default_instance_;
+class PlayerNumber;
+class PlayerNumberDefaultTypeInternal;
+extern PlayerNumberDefaultTypeInternal _PlayerNumber_default_instance_;
 class UserInput;
 class UserInputDefaultTypeInternal;
 extern UserInputDefaultTypeInternal _UserInput_default_instance_;
@@ -72,6 +75,7 @@ PROTOBUF_NAMESPACE_OPEN
 template<> ::FinalProject::Bullet* Arena::CreateMaybeMessage<::FinalProject::Bullet>(Arena*);
 template<> ::FinalProject::GameScene* Arena::CreateMaybeMessage<::FinalProject::GameScene>(Arena*);
 template<> ::FinalProject::Player* Arena::CreateMaybeMessage<::FinalProject::Player>(Arena*);
+template<> ::FinalProject::PlayerNumber* Arena::CreateMaybeMessage<::FinalProject::PlayerNumber>(Arena*);
 template<> ::FinalProject::UserInput* Arena::CreateMaybeMessage<::FinalProject::UserInput>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace FinalProject {
@@ -193,6 +197,7 @@ class UserInput :
   enum : int {
     kIdFieldNumber = 1,
     kInputFieldNumber = 2,
+    kIsShootingFieldNumber = 3,
   };
   // required int32 id = 1;
   bool has_id() const;
@@ -220,6 +225,19 @@ class UserInput :
   void _internal_set_input(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // required bool isShooting = 3;
+  bool has_isshooting() const;
+  private:
+  bool _internal_has_isshooting() const;
+  public:
+  void clear_isshooting();
+  bool isshooting() const;
+  void set_isshooting(bool value);
+  private:
+  bool _internal_isshooting() const;
+  void _internal_set_isshooting(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:FinalProject.UserInput)
  private:
   class _Internal;
@@ -232,6 +250,7 @@ class UserInput :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
   ::PROTOBUF_NAMESPACE_ID::int32 input_;
+  bool isshooting_;
   friend struct ::TableStruct_FinalProject_2eproto;
 };
 // -------------------------------------------------------------------
@@ -531,8 +550,9 @@ class Player :
   enum : int {
     kPositionFieldNumber = 2,
     kVelocityFieldNumber = 3,
-    kOrientationFieldNumber = 4,
     kStateFieldNumber = 1,
+    kOrientationFieldNumber = 4,
+    kIsShootingFieldNumber = 5,
   };
   // repeated float position = 2;
   int position_size() const;
@@ -578,28 +598,6 @@ class Player :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_velocity();
 
-  // repeated float orientation = 4;
-  int orientation_size() const;
-  private:
-  int _internal_orientation_size() const;
-  public:
-  void clear_orientation();
-  private:
-  float _internal_orientation(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-      _internal_orientation() const;
-  void _internal_add_orientation(float value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-      _internal_mutable_orientation();
-  public:
-  float orientation(int index) const;
-  void set_orientation(int index, float value);
-  void add_orientation(float value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-      orientation() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-      mutable_orientation();
-
   // required int32 state = 1;
   bool has_state() const;
   private:
@@ -613,17 +611,47 @@ class Player :
   void _internal_set_state(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // required int32 orientation = 4;
+  bool has_orientation() const;
+  private:
+  bool _internal_has_orientation() const;
+  public:
+  void clear_orientation();
+  ::PROTOBUF_NAMESPACE_ID::int32 orientation() const;
+  void set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_orientation() const;
+  void _internal_set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // required bool isShooting = 5;
+  bool has_isshooting() const;
+  private:
+  bool _internal_has_isshooting() const;
+  public:
+  void clear_isshooting();
+  bool isshooting() const;
+  void set_isshooting(bool value);
+  private:
+  bool _internal_isshooting() const;
+  void _internal_set_isshooting(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:FinalProject.Player)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > position_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > velocity_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > orientation_;
   ::PROTOBUF_NAMESPACE_ID::int32 state_;
+  ::PROTOBUF_NAMESPACE_ID::int32 orientation_;
+  bool isshooting_;
   friend struct ::TableStruct_FinalProject_2eproto;
 };
 // -------------------------------------------------------------------
@@ -744,6 +772,8 @@ class Bullet :
     kPositionFieldNumber = 2,
     kVelocityFieldNumber = 3,
     kStateFieldNumber = 1,
+    kOrientationFieldNumber = 4,
+    kStartTimeFieldNumber = 5,
   };
   // repeated float position = 2;
   int position_size() const;
@@ -802,9 +832,38 @@ class Bullet :
   void _internal_set_state(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // required int32 orientation = 4;
+  bool has_orientation() const;
+  private:
+  bool _internal_has_orientation() const;
+  public:
+  void clear_orientation();
+  ::PROTOBUF_NAMESPACE_ID::int32 orientation() const;
+  void set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_orientation() const;
+  void _internal_set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // required float startTime = 5;
+  bool has_starttime() const;
+  private:
+  bool _internal_has_starttime() const;
+  public:
+  void clear_starttime();
+  float starttime() const;
+  void set_starttime(float value);
+  private:
+  float _internal_starttime() const;
+  void _internal_set_starttime(float value);
+  public:
+
   // @@protoc_insertion_point(class_scope:FinalProject.Bullet)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
@@ -812,6 +871,148 @@ class Bullet :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > position_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > velocity_;
   ::PROTOBUF_NAMESPACE_ID::int32 state_;
+  ::PROTOBUF_NAMESPACE_ID::int32 orientation_;
+  float starttime_;
+  friend struct ::TableStruct_FinalProject_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PlayerNumber :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:FinalProject.PlayerNumber) */ {
+ public:
+  PlayerNumber();
+  virtual ~PlayerNumber();
+
+  PlayerNumber(const PlayerNumber& from);
+  PlayerNumber(PlayerNumber&& from) noexcept
+    : PlayerNumber() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerNumber& operator=(const PlayerNumber& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PlayerNumber& operator=(PlayerNumber&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const PlayerNumber& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerNumber* internal_default_instance() {
+    return reinterpret_cast<const PlayerNumber*>(
+               &_PlayerNumber_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(PlayerNumber& a, PlayerNumber& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PlayerNumber* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerNumber* New() const final {
+    return CreateMaybeMessage<PlayerNumber>(nullptr);
+  }
+
+  PlayerNumber* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<PlayerNumber>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const PlayerNumber& from);
+  void MergeFrom(const PlayerNumber& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerNumber* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "FinalProject.PlayerNumber";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_FinalProject_2eproto);
+    return ::descriptor_table_FinalProject_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNumberFieldNumber = 1,
+  };
+  // required int32 number = 1;
+  bool has_number() const;
+  private:
+  bool _internal_has_number() const;
+  public:
+  void clear_number();
+  ::PROTOBUF_NAMESPACE_ID::int32 number() const;
+  void set_number(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_number() const;
+  void _internal_set_number(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:FinalProject.PlayerNumber)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 number_;
   friend struct ::TableStruct_FinalProject_2eproto;
 };
 // ===================================================================
@@ -879,6 +1080,34 @@ inline void UserInput::_internal_set_input(::PROTOBUF_NAMESPACE_ID::int32 value)
 inline void UserInput::set_input(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_input(value);
   // @@protoc_insertion_point(field_set:FinalProject.UserInput.input)
+}
+
+// required bool isShooting = 3;
+inline bool UserInput::_internal_has_isshooting() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool UserInput::has_isshooting() const {
+  return _internal_has_isshooting();
+}
+inline void UserInput::clear_isshooting() {
+  isshooting_ = false;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline bool UserInput::_internal_isshooting() const {
+  return isshooting_;
+}
+inline bool UserInput::isshooting() const {
+  // @@protoc_insertion_point(field_get:FinalProject.UserInput.isShooting)
+  return _internal_isshooting();
+}
+inline void UserInput::_internal_set_isshooting(bool value) {
+  _has_bits_[0] |= 0x00000004u;
+  isshooting_ = value;
+}
+inline void UserInput::set_isshooting(bool value) {
+  _internal_set_isshooting(value);
+  // @@protoc_insertion_point(field_set:FinalProject.UserInput.isShooting)
 }
 
 // -------------------------------------------------------------------
@@ -1117,51 +1346,60 @@ Player::mutable_velocity() {
   return _internal_mutable_velocity();
 }
 
-// repeated float orientation = 4;
-inline int Player::_internal_orientation_size() const {
-  return orientation_.size();
+// required int32 orientation = 4;
+inline bool Player::_internal_has_orientation() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
 }
-inline int Player::orientation_size() const {
-  return _internal_orientation_size();
+inline bool Player::has_orientation() const {
+  return _internal_has_orientation();
 }
 inline void Player::clear_orientation() {
-  orientation_.Clear();
+  orientation_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
 }
-inline float Player::_internal_orientation(int index) const {
-  return orientation_.Get(index);
-}
-inline float Player::orientation(int index) const {
-  // @@protoc_insertion_point(field_get:FinalProject.Player.orientation)
-  return _internal_orientation(index);
-}
-inline void Player::set_orientation(int index, float value) {
-  orientation_.Set(index, value);
-  // @@protoc_insertion_point(field_set:FinalProject.Player.orientation)
-}
-inline void Player::_internal_add_orientation(float value) {
-  orientation_.Add(value);
-}
-inline void Player::add_orientation(float value) {
-  _internal_add_orientation(value);
-  // @@protoc_insertion_point(field_add:FinalProject.Player.orientation)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Player::_internal_orientation() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 Player::_internal_orientation() const {
   return orientation_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Player::orientation() const {
-  // @@protoc_insertion_point(field_list:FinalProject.Player.orientation)
+inline ::PROTOBUF_NAMESPACE_ID::int32 Player::orientation() const {
+  // @@protoc_insertion_point(field_get:FinalProject.Player.orientation)
   return _internal_orientation();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Player::_internal_mutable_orientation() {
-  return &orientation_;
+inline void Player::_internal_set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  orientation_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Player::mutable_orientation() {
-  // @@protoc_insertion_point(field_mutable_list:FinalProject.Player.orientation)
-  return _internal_mutable_orientation();
+inline void Player::set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_orientation(value);
+  // @@protoc_insertion_point(field_set:FinalProject.Player.orientation)
+}
+
+// required bool isShooting = 5;
+inline bool Player::_internal_has_isshooting() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool Player::has_isshooting() const {
+  return _internal_has_isshooting();
+}
+inline void Player::clear_isshooting() {
+  isshooting_ = false;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline bool Player::_internal_isshooting() const {
+  return isshooting_;
+}
+inline bool Player::isshooting() const {
+  // @@protoc_insertion_point(field_get:FinalProject.Player.isShooting)
+  return _internal_isshooting();
+}
+inline void Player::_internal_set_isshooting(bool value) {
+  _has_bits_[0] |= 0x00000004u;
+  isshooting_ = value;
+}
+inline void Player::set_isshooting(bool value) {
+  _internal_set_isshooting(value);
+  // @@protoc_insertion_point(field_set:FinalProject.Player.isShooting)
 }
 
 // -------------------------------------------------------------------
@@ -1290,9 +1528,99 @@ Bullet::mutable_velocity() {
   return _internal_mutable_velocity();
 }
 
+// required int32 orientation = 4;
+inline bool Bullet::_internal_has_orientation() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Bullet::has_orientation() const {
+  return _internal_has_orientation();
+}
+inline void Bullet::clear_orientation() {
+  orientation_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Bullet::_internal_orientation() const {
+  return orientation_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Bullet::orientation() const {
+  // @@protoc_insertion_point(field_get:FinalProject.Bullet.orientation)
+  return _internal_orientation();
+}
+inline void Bullet::_internal_set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  orientation_ = value;
+}
+inline void Bullet::set_orientation(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_orientation(value);
+  // @@protoc_insertion_point(field_set:FinalProject.Bullet.orientation)
+}
+
+// required float startTime = 5;
+inline bool Bullet::_internal_has_starttime() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool Bullet::has_starttime() const {
+  return _internal_has_starttime();
+}
+inline void Bullet::clear_starttime() {
+  starttime_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline float Bullet::_internal_starttime() const {
+  return starttime_;
+}
+inline float Bullet::starttime() const {
+  // @@protoc_insertion_point(field_get:FinalProject.Bullet.startTime)
+  return _internal_starttime();
+}
+inline void Bullet::_internal_set_starttime(float value) {
+  _has_bits_[0] |= 0x00000004u;
+  starttime_ = value;
+}
+inline void Bullet::set_starttime(float value) {
+  _internal_set_starttime(value);
+  // @@protoc_insertion_point(field_set:FinalProject.Bullet.startTime)
+}
+
+// -------------------------------------------------------------------
+
+// PlayerNumber
+
+// required int32 number = 1;
+inline bool PlayerNumber::_internal_has_number() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool PlayerNumber::has_number() const {
+  return _internal_has_number();
+}
+inline void PlayerNumber::clear_number() {
+  number_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerNumber::_internal_number() const {
+  return number_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerNumber::number() const {
+  // @@protoc_insertion_point(field_get:FinalProject.PlayerNumber.number)
+  return _internal_number();
+}
+inline void PlayerNumber::_internal_set_number(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  number_ = value;
+}
+inline void PlayerNumber::set_number(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_number(value);
+  // @@protoc_insertion_point(field_set:FinalProject.PlayerNumber.number)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

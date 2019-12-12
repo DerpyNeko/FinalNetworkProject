@@ -5,6 +5,7 @@ package FinalProject;
 message UserInput {
 required int32 id = 1;
 required int32 input = 2;
+required bool isShooting = 3;
 }
 
 message GameScene {
@@ -17,11 +18,18 @@ message Player {
 required int32 state = 1;
 repeated float position = 2;
 repeated float velocity = 3;
-repeated float orientation = 4;
+required int32 orientation = 4;
+required bool isShooting = 5;
 }
 
 message Bullet {
 required int32 state = 1;
 repeated float position = 2;
 repeated float velocity = 3;
+required int32 orientation = 4;
+required float startTime = 5;
+}
+
+message PlayerNumber {
+required int32 number = 1;
 }

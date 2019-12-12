@@ -30,12 +30,10 @@ private:
 	void ReadData(void);
 
 	void UpdatePlayers(void);
+	void UpdateBullets(void);
 	void BroadcastUpdate(void);
 
 	bool mIsRunning;
 
-	FD_SET mReadSet;
-	timeval mTv;
-	SOCKET mAcceptSocket;
 	SOCKET mListenSocket;
 };

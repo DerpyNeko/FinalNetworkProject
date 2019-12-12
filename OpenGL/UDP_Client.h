@@ -27,10 +27,12 @@ public:
 	void CreateSocket(string ip, int port);
 	void Update(void);
 
-	void SendInput(int direction);
-	void Send(std::string serializedString);
+	void SendInput(int command, bool isShooting);
+	void Send(int id, std::string serializedString);
 
-	void SetPosition(int id, float& x, float& z);
+	void SetPlayerNumber(int& num);
+	void SetPlayerPosition(int id, float& x, float& z);
+	void SetBulletPosition(int id, float& x, float& z);
 private:
 	void SetNonBlocking(SOCKET socket);
 	void Recv(void);

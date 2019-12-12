@@ -22,6 +22,7 @@
 
 #include "UDP_Client.h"
 #include <conio.h>
+#include <ctime>
 
 cDebugRenderer* g_pDebugRendererACTUAL = NULL;
 iDebugRenderer* g_pDebugRenderer = NULL;
@@ -34,14 +35,20 @@ cCamera* g_pCamera = NULL;
 std::vector<cMeshObject*> g_vec_pObjectsToDraw;
 std::vector<sLight*> g_Lights;
 
+int g_PlayerNumber = -1;
 bool isFireProjectile = false;
 std::vector<cMeshObject*> g_Players;
-cMeshObject* g_Bullet = new cMeshObject();
+std::vector<cMeshObject*> g_Bullets;
 glm::vec3 g_BulletPosition = {};
 double startTime = 0.0;
 double currentTime = 0.0;
-Direction g_PlayerDirection = NONE;
+Direction g_PlayerInput = NONE;
 Direction g_BulletDirection = NONE;
+
+const float UPDATES_PER_SEC = 25;		// 5Hz / 200ms per update / 5 updates per second
+std::clock_t curr;
+std::clock_t prev;
+double elapsed_secs;
 
 int g_ModelIndex = 0;
 bool g_bDrawDebugLightSpheres = false;
@@ -56,51 +63,13 @@ static void error_callback(int error, const char* description)
 	fprintf(stderr, "Error: %s\n", description);
 }
 
-// Handle the client thread and receives messages from the server
-void ClientThread()
-{
-	std::vector<char> packet(512);
-	int packLength;
-	//while (run)
-	//{
-	//	if ((packLength = recv(Connection, &packet[0], packet.size(), NULL)) < 1) {
-	//		std::cout << "Closing connection" << std::endl;
-	//		closesocket(Connection);
-	//		WSACleanup();
-	//		run = false;
-	//	}
-	//	else
-	//	{
-	//		Protocol* messageProtocol = new Protocol();
-	//		messageProtocol->CreateBuffer(512);
-
-	//		messageProtocol->buffer->mBuffer = packet;
-	//		messageProtocol->ReadHeader(*messageProtocol->buffer);
-
-	//		messageProtocol->buffer->ResizeBuffer(messageProtocol->messageHeader.packetLength);
-
-	//		commandID = messageProtocol->messageHeader.commandId;
-
-	//		if (commandID == 5)
-	//		{
-	//			messageProtocol->ReceiveUsername(*messageProtocol->buffer);
-	//			isValidCredentials = true;
-	//			userName = messageProtocol->messageBody.userName;
-	//		}
-
-	//		messageProtocol->ReceiveMessage(*messageProtocol->buffer);
-	//		std::cout << messageProtocol->messageBody.message << std::endl;
-
-	//		delete messageProtocol;
-	//	}
-	//}
-}
-
 int main(void)
 {
 	UDPClient client;
-	client.CreateSocket("127.0.0.1", 5150);
+	client.CreateSocket("127.0.0.1", 5150);	
+
 	std::cout << "Connected!" << std::endl;
+	prev = std::clock();
 
 	GLFWwindow* window;
 
@@ -378,69 +347,79 @@ int main(void)
 		}
 
 		// projectile
-		if (isFireProjectile)
+		//if (isFireProjectile)
+		//{
+		//	// ONLY SHOOTS IF A DIRECTION KEY IS PRESSED + SPACE
+
+		//	g_Bullets[0]->bIsVisible = true;
+		//	g_Bullets[0]->position = glm::vec3(g_BulletPosition.x, g_BulletPosition.y, g_BulletPosition.z);
+		//	g_Bullets[0]->setUniformScale(0.2f);
+		//	//g_Bullet->adjMeshOrientationQ(::g_vec_pObjectsToDraw[0]->getQOrientation());
+
+		//	g_Bullets[0]->pDebugRenderer = ::g_pDebugRenderer;
+		//	glm::mat4x4 matModel = glm::mat4(1.0f);
+		//	DrawObject(g_Bullets[0], matModel, program);
+
+		//	if(startTime == 0.0)
+		//		startTime = glfwGetTime();
+
+		//	currentTime = glfwGetTime();
+		//	if (currentTime >= startTime + 2.0)
+		//	{
+		//		g_Bullets[0]->bIsVisible = false;
+		//		g_Bullets[0]->position = g_Players[0]->position;
+		//		startTime = 0.0;
+		//		isFireProjectile = !isFireProjectile;
+		//	}
+		//	else
+		//	{
+		//		if (g_BulletDirection == UP)
+		//		{
+		//			g_BulletPosition.z += 0.08;
+		//		}
+		//		else if (g_BulletDirection == DOWN)
+		//		{
+		//			g_BulletPosition.z -= 0.08;
+		//		}
+		//		else if (g_BulletDirection == LEFT)
+		//		{
+		//			g_BulletPosition.x += 0.08;
+		//		}
+		//		else if (g_BulletDirection == RIGHT)
+		//		{
+		//			g_BulletPosition.x -= 0.08;
+		//		}
+		//	}
+		//}
+
+
+		curr = std::clock();
+		elapsed_secs = (curr - prev) / double(CLOCKS_PER_SEC);
+
+		if (elapsed_secs >= (1.0f / UPDATES_PER_SEC))
 		{
-			// ONLY SHOOTS IF A DIRECTION KEY IS PRESSED + SPACE
-
-			g_Bullet->bIsVisible = true;
-			g_Bullet->position = glm::vec3(g_BulletPosition.x, g_BulletPosition.y, g_BulletPosition.z);
-			g_Bullet->setUniformScale(0.2f);
-			//g_Bullet->adjMeshOrientationQ(::g_vec_pObjectsToDraw[0]->getQOrientation());
-
-			g_Bullet->pDebugRenderer = ::g_pDebugRenderer;
-			glm::mat4x4 matModel = glm::mat4(1.0f);
-			DrawObject(g_Bullet, matModel, program);
-
-			if(startTime == 0.0)
-				startTime = glfwGetTime();
-
-			currentTime = glfwGetTime();
-			if (currentTime >= startTime + 2.0)
-			{
-				g_Bullet->bIsVisible = false;
-				g_Bullet->position = g_Players[0]->position;
-				startTime = 0.0;
-				isFireProjectile = !isFireProjectile;
-			}
-			else
-			{
-				if (g_BulletDirection == UP)
-				{
-					g_BulletPosition.z += 0.08;
-				}
-				else if (g_BulletDirection == DOWN)
-				{
-					g_BulletPosition.z -= 0.08;
-				}
-				else if (g_BulletDirection == LEFT)
-				{
-					g_BulletPosition.x += 0.08;
-				}
-				else if (g_BulletDirection == RIGHT)
-				{
-					g_BulletPosition.x -= 0.08;
-				}
-			}
+			client.SendInput(g_PlayerInput, isFireProjectile);
+			g_PlayerInput = NONE;
+			isFireProjectile = false;
+			prev = curr;
 		}
-
-		//char input[4];
-		//input[0] = g_PlayerDirection == UP ? 1 : 0;
-		//input[1] = g_PlayerDirection == DOWN ? 1 : 0;
-		//input[2] = g_PlayerDirection == LEFT ? 1 : 0;
-		//input[3] = g_PlayerDirection == RIGHT ? 1 : 0;
-
-		client.SendInput(g_PlayerDirection);
-
+		
 		client.Update();
 		
-		g_PlayerDirection = NONE;
+		if (g_PlayerNumber < 0)
+		{
+			client.SetPlayerNumber(g_PlayerNumber);
+			std::cout << "Player number is: " << g_PlayerNumber << std::endl;
+		}
 
-		//for (int i = 0; i < 4; i++) {
-		//	std::cout << "Before Set player[" << i << "] Position: " << g_Players[i]->position.x << ", " << g_Players[i]->position.y << ", " << g_Players[i]->position.z << std::endl;
-		//	client.SetPosition(i, g_Players[i]->position.x, g_Players[i]->position.z);
-		//	std::cout << "After Set player[" << i << "] Position: " << g_Players[i]->position.x << ", " << g_Players[i]->position.y << ", " << g_Players[i]->position.z << std::endl;
-		//}
-		client.SetPosition(0, g_Players[0]->position.x, g_Players[0]->position.z);
+		for (int i = 0; i < 4; i++) 
+		{
+			client.SetPlayerPosition(i, g_Players[i]->position.x, g_Players[i]->position.z);
+			client.SetBulletPosition(i, g_Bullets[i]->position.x, g_Bullets[i]->position.z);
+		}
+
+	//	client.SetPlayerPosition(0, g_Players[0]->position.x, g_Players[0]->position.z);
+	//	client.SetBulletPosition(0, g_Bullets[0]->position.x, g_Bullets[0]->position.z);
 
 		// Draw all the solid objects in the "scene"
 		for (unsigned int objIndex = 0; objIndex != (unsigned int)vec_pSolidObject.size(); objIndex++)
