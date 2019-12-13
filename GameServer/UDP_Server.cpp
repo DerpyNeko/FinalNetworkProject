@@ -181,9 +181,9 @@ void UDPServer::UpdatePlayers(void)
 			if (orientation == 4)
 				currentx -= 0.05f;
 
-		if (orientation == 5)
+		if (mPlayers[i]->state() == INACTIVE)
 		{
-			if (mPlayers[i]->state() == INACTIVE)
+			if (orientation == 5)
 			{
 				mPlayers[i]->set_state(ACTIVE);
 				currentx = mStartingPositions[i].first;
