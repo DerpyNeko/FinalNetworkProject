@@ -183,9 +183,12 @@ void UDPServer::UpdatePlayers(void)
 
 		if (orientation == 5)
 		{
-			mPlayers[i]->set_state(ACTIVE);
-			currentx = mStartingPositions[i].first;
-			currentz = mStartingPositions[i].second;
+			if (mPlayers[i]->state() == INACTIVE)
+			{
+				mPlayers[i]->set_state(ACTIVE);
+				currentx = mStartingPositions[i].first;
+				currentz = mStartingPositions[i].second;
+			}
 		}
 
 		if (orientation != 0)
@@ -215,7 +218,6 @@ float CalculateDistance(int x1, int y1, int x2, int y2)
 	// Calculating distance 
 	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) * 1.0);
 }
-
 
 void UDPServer::UpdateBullets(void)
 {
@@ -278,6 +280,8 @@ void UDPServer::UpdateBullets(void)
 			{
 				// Two seconds have past, so reset the bullet
 				mBullets[i]->set_state(INACTIVE);
+				mBullets[i]->set_position(0, mPlayers[i]->position(0));
+				mBullets[i]->set_position(1, mPlayers[i]->position(1));
 			}
 		}
 		else
