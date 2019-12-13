@@ -43,9 +43,6 @@
     <Filter Include="Error">
       <UniqueIdentifier>{89a30d3c-aa0f-4bd7-9307-37b4e05b5a87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Physics">
-      <UniqueIdentifier>{c2b57ee5-87ce-4379-95f3-2ffb1ff118fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Networking">
       <UniqueIdentifier>{c2a47729-8694-4c7e-a7d5-e67199cfe6fc}</UniqueIdentifier>
     </Filter>
@@ -102,15 +99,6 @@
     <ClCompile Include="CreateLights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager\C24BitBMPpixel.cpp">
-      <Filter>TextureManager</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager\cBasicTextureManager.cpp">
-      <Filter>TextureManager</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager\CTextureFromBMP.cpp">
-      <Filter>TextureManager</Filter>
-    </ClCompile>
     <ClCompile Include="DebugRenderer\cDebugRenderer.cpp">
       <Filter>DebugRenderer</Filter>
     </ClCompile>
@@ -123,14 +111,20 @@
     <ClCompile Include="Error\COpenGLError.cpp">
       <Filter>Error</Filter>
     </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="FinalProject.pb.cc">
       <Filter>Networking\Proto</Filter>
     </ClCompile>
     <ClCompile Include="UDP_Client.cpp">
       <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\C24BitBMPpixel.cpp">
+      <Filter>TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\cBasicTextureManager.cpp">
+      <Filter>TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager\CTextureFromBMP.cpp">
+      <Filter>TextureManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,15 +167,6 @@
     <ClInclude Include="cCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager\C24BitBMPpixel.h">
-      <Filter>TextureManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager\cBasicTextureManager.h">
-      <Filter>TextureManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager\CTextureFromBMP.h">
-      <Filter>TextureManager</Filter>
-    </ClInclude>
     <ClInclude Include="DebugRenderer\cDebugRenderer.h">
       <Filter>DebugRenderer</Filter>
     </ClInclude>
@@ -199,6 +184,15 @@
     </ClInclude>
     <ClInclude Include="UDP_Client.h">
       <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\C24BitBMPpixel.h">
+      <Filter>TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\cBasicTextureManager.h">
+      <Filter>TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager\CTextureFromBMP.h">
+      <Filter>TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

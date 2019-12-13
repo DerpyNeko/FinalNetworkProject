@@ -31,8 +31,9 @@ public:
 	void Send(int id, std::string serializedString);
 
 	void SetPlayerNumber(int& num);
-	void SetPlayerPosition(int id, float& x, float& z);
+	void SetPlayerPosition(int id, float& x, float& z, int& rotation, bool& isActive);
 	void SetBulletPosition(int id, float& x, float& z);
+	void SetHitboxPosition(int id, float& x, float& z);
 private:
 	void SetNonBlocking(SOCKET socket);
 	void Recv(void);

@@ -27,20 +27,34 @@ void _PrintWSAError(const char* file, int line)
 
 void UDPClient::SetPlayerNumber(int& num)
 {
-	std::cout << "NUM IS " << num << " mPlayerNumber is: " << mPlayerNumber << std::endl;
 	num = mPlayerNumber;
 }
 
-void UDPClient::SetPlayerPosition(int id, float& x, float& z)
+void UDPClient::SetPlayerPosition(int id, float& x, float& z, int& rotation, bool& isActive)
 {
-	x = mPlayers[id]->position(0);
-	z = mPlayers[id]->position(1);
+	if (mPlayers[id]->state() == ACTIVE)
+	{
+		x = mPlayers[id]->position(0);
+		z = mPlayers[id]->position(1);
+		rotation = mPlayers[id]->orientation();
+		isActive = true;
+	}
+	else
+	{
+		isActive = false;
+	}
 }
 
 void UDPClient::SetBulletPosition(int id, float& x, float& z)
 {
 	x = mBullets[id]->position(0);
 	z = mBullets[id]->position(1);
+}
+
+void UDPClient::SetHitboxPosition(int id, float& x, float& z)
+{
+	x = mPlayers[id]->position(0);
+	z = mPlayers[id]->position(1);
 }
 
 UDPClient::UDPClient(void) :mServerSocket(INVALID_SOCKET)
@@ -52,7 +66,6 @@ UDPClient::UDPClient(void) :mServerSocket(INVALID_SOCKET)
 	iResult = WSAStartup(MAKEWORD(2, 2), &WSAData);
 	if (iResult != 0) 
 	{
-		std::cout << "Erroring in initalization" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -93,7 +106,6 @@ void UDPClient::SetNonBlocking(SOCKET socket)
 	int result = ioctlsocket(socket, FIONBIO, &NonBlock);
 	if (result == SOCKET_ERROR) 
 	{
-		std::cout << "Erroring in set non blocking" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -104,7 +116,6 @@ void UDPClient::CreateSocket(string ip, int port)
 	mServerSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (mServerSocket == SOCKET_ERROR) 
 	{
-		std::cout << "Erroring in creating socket" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -133,22 +144,12 @@ void UDPClient::Recv(void)
 		if (WSAGetLastError() == WSAEWOULDBLOCK)
 			return;
 		
-		std::cout << "Erroring in recv" << std::endl;
 		PrintWSAError();
 
 		packet.clear();
 		return;
 	}
-	
-	//if (mPlayerNumber == -1)
-	//{
-	//	PlayerNumber* playerNum = new PlayerNumber();
-	//	playerNum->set_number(-1);
-	//	std::string serializedResult = playerNum->SerializeAsString();
-	//	Send(10, serializedResult);
-	//}
 
-	// IMPORTANT
 	unsigned int numPlayers = 4;
 
 	std::string packetContents;
@@ -178,21 +179,13 @@ void UDPClient::Recv(void)
 			mPlayers[i]->set_state(scene->players(i).state());
 			mPlayers[i]->set_position(0, scene->players(i).position(0));
 			mPlayers[i]->set_position(1, scene->players(i).position(1));
+			mPlayers[i]->set_orientation(scene->players(i).orientation());
+			mPlayers[i]->set_isshooting(scene->players(i).isshooting());
 
 			mBullets[i]->set_state(scene->bullets(i).state());
 			mBullets[i]->set_position(0, scene->bullets(i).position(0));
 			mBullets[i]->set_position(1, scene->bullets(i).position(1));
 		}
-
-		//unsigned short port = si_other.sin_port;
-		//printf("%d : %hu received %d bytes\n", mServerSocket, port, result);
-
-		printf("%d players: {", numPlayers);
-		for (int i = 0; i < numPlayers; i++)
-		{
-			printf(" {x: %.2f, z: %.2f}", mPlayers[i]->position(0), mPlayers[i]->position(1));
-		}
-		printf(" }\n");
 	}
 }
 
@@ -220,14 +213,11 @@ void UDPClient::Send(int id, std::string serializedString)
 	}
 	
 	int result = sendto(mServerSocket, &packet[0], packet.size(), 0, (struct sockaddr*) & si_other, sizeof(si_other));
-	//	Sleep(10);
-//	int result = sendto(mServerSocket, data, numBytes, 0, (struct sockaddr*) & si_other, sizeof(si_other));
 
 	if (result == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) 
 			return;
 
-		std::cout << "Erroring in send" << std::endl;
 		PrintWSAError();
 		return;
 	}
@@ -236,24 +226,4 @@ void UDPClient::Send(int id, std::string serializedString)
 		printf("Disconnected...\n");
 		return;
 	}
-
-	// printf("Number of bytes sent: %d\n", result);
 }
-
-// Sends message to client
-//void SendToClient(SOCKET connection, int id, std::string serializedString)
-//{
-//	// Packet -> [requestId][contentSize][content]
-//	std::vector<char> packet;
-//	packet.push_back(id);
-//	packet.push_back(serializedString.length());
-//
-//	const char* temp = serializedString.c_str();
-//	for (int i = 0; i < serializedString.length(); i++)
-//	{
-//		packet.push_back(temp[i]);
-//	}
-//
-//	send(connection, &packet[0], packet.size(), 0);
-//	Sleep(10);
-//}

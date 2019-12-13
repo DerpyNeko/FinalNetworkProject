@@ -54,7 +54,7 @@ extern std::vector<cMeshObject*> g_Bullets;
 extern std::vector<cMeshObject*> g_HitBoxes;
 extern glm::vec3 g_BulletPosition;
 
-enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
+enum Direction { NONE, UP, DOWN, LEFT, RIGHT, ENTER };
 extern Direction g_PlayerInput;
 extern Direction g_BulletDirection;
 

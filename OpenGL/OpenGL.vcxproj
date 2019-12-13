@@ -169,7 +169,6 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="LoadModels.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="sModelDrawInfo.cpp" />
     <ClCompile Include="TextureManager\C24BitBMPpixel.cpp" />
     <ClCompile Include="TextureManager\cBasicTextureManager.cpp" />

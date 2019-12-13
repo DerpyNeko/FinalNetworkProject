@@ -319,80 +319,15 @@ int main(void)
 				if (textureCount % 2 == 0)
 				{
 					pFloor->setDiffuseColour(glm::vec3(0.0f, 0.0f, 0.0f));
-
-					//cMeshObject* pFloor = findObjectByFriendlyName("CubeLight");
-					//pFloor->bIsVisible = true;
-					//pFloor->position = glm::vec3((float)i, 0.0f, (float)j);
-					//pFloor->setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f));
-
-					//pFloor->pDebugRenderer = ::g_pDebugRenderer;
-					//glm::mat4x4 matModel = glm::mat4(1.0f);
-					//DrawObject(pFloor, matModel, program);
 				}
 				else
 				{
 					pFloor->setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f));
-
-					//cMeshObject* pFloor = findObjectByFriendlyName("CubeDark");
-					//pFloor->bIsVisible = true;
-					//pFloor->position = glm::vec3((float)i, 0.0f, (float)j);
-					//pFloor->setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f));
-
-					//pFloor->pDebugRenderer = ::g_pDebugRenderer;
-					//glm::mat4x4 matModel = glm::mat4(1.0f);
-					//DrawObject(pFloor, matModel, program);
 				}
 				textureCount++;
 
 			}
 		}
-
-		// projectile
-		//if (isFireProjectile)
-		//{
-		//	// ONLY SHOOTS IF A DIRECTION KEY IS PRESSED + SPACE
-
-		//	g_Bullets[0]->bIsVisible = true;
-		//	g_Bullets[0]->position = glm::vec3(g_BulletPosition.x, g_BulletPosition.y, g_BulletPosition.z);
-		//	g_Bullets[0]->setUniformScale(0.2f);
-		//	//g_Bullet->adjMeshOrientationQ(::g_vec_pObjectsToDraw[0]->getQOrientation());
-
-		//	g_Bullets[0]->pDebugRenderer = ::g_pDebugRenderer;
-		//	glm::mat4x4 matModel = glm::mat4(1.0f);
-		//	DrawObject(g_Bullets[0], matModel, program);
-
-		//	if(startTime == 0.0)
-		//		startTime = glfwGetTime();
-
-		//	currentTime = glfwGetTime();
-		//	if (currentTime >= startTime + 2.0)
-		//	{
-		//		g_Bullets[0]->bIsVisible = false;
-		//		g_Bullets[0]->position = g_Players[0]->position;
-		//		startTime = 0.0;
-		//		isFireProjectile = !isFireProjectile;
-		//	}
-		//	else
-		//	{
-		//		if (g_BulletDirection == UP)
-		//		{
-		//			g_BulletPosition.z += 0.08;
-		//		}
-		//		else if (g_BulletDirection == DOWN)
-		//		{
-		//			g_BulletPosition.z -= 0.08;
-		//		}
-		//		else if (g_BulletDirection == LEFT)
-		//		{
-		//			g_BulletPosition.x += 0.08;
-		//		}
-		//		else if (g_BulletDirection == RIGHT)
-		//		{
-		//			g_BulletPosition.x -= 0.08;
-		//		}
-		//	}
-		//}
-
 
 		curr = std::clock();
 		elapsed_secs = (curr - prev) / double(CLOCKS_PER_SEC);
@@ -411,17 +346,48 @@ int main(void)
 		{
 			client.SetPlayerNumber(g_PlayerNumber);
 			std::cout << "Player number is: " << g_PlayerNumber << std::endl;
+			std::cout << "Use WASD to move, SPACE to shoot and ENTER to respawn" << std::endl;
 		}
 
 		for (int i = 0; i < 4; i++) 
 		{
-			client.SetPlayerPosition(i, g_Players[i]->position.x, g_Players[i]->position.z);
-			client.SetPlayerPosition(i, g_HitBoxes[i]->position.x, g_HitBoxes[i]->position.z);
-			client.SetBulletPosition(i, g_Bullets[i]->position.x, g_Bullets[i]->position.z);
-		}
+			int rotation = -1;
+			bool isActive = false;
 
-	//	client.SetPlayerPosition(0, g_Players[0]->position.x, g_Players[0]->position.z);
-	//	client.SetBulletPosition(0, g_Bullets[0]->position.x, g_Bullets[0]->position.z);
+			client.SetPlayerPosition(i, g_Players[i]->position.x, g_Players[i]->position.z, rotation, isActive);
+
+			if (isActive)
+			{
+				g_Players[i]->bIsVisible = true;
+				g_Bullets[i]->bIsVisible = true;
+
+				if (rotation == 1)
+				{
+					g_Players[i]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+				}
+				else if (rotation == 2)
+				{
+					g_Players[i]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+				}
+				else if (rotation == 3)
+				{
+					g_Players[i]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+				}
+				else if (rotation == 4)
+				{
+					g_Players[i]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+				}
+
+				//client.SetHitboxPosition(i, g_HitBoxes[i]->position.x, g_HitBoxes[i]->position.z);
+				client.SetBulletPosition(i, g_Bullets[i]->position.x, g_Bullets[i]->position.z);
+			}
+			else
+			{
+				g_Players[i]->bIsVisible = false;
+				g_Bullets[i]->bIsVisible = false;
+
+			}
+		}
 
 		// Draw all the solid objects in the "scene"
 		for (unsigned int objIndex = 0; objIndex != (unsigned int)vec_pSolidObject.size(); objIndex++)
@@ -442,12 +408,6 @@ int main(void)
 
 			DrawObject(pCurrentMesh, matModel, program);
 		}
-
-		// High res timer (likely in ms or ns)
-		//double currentTime = glfwGetTime();
-		//double deltaTime = currentTime - lastTime;
-		
-		//::g_pDebugRendererACTUAL->RenderDebugObjects(matView, matProjection, deltaTime);
 
 		UpdateWindowTitle(window);
 		glfwSwapBuffers(window);		// Shows what we drew

@@ -71,7 +71,7 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		{
 			if (g_Players[g_PlayerNumber]->position.z < 10.25f)
 			{
-				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
+				//g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
 				g_PlayerInput = UP;
 			}
 		}
@@ -79,7 +79,7 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		{
 			if (g_Players[g_PlayerNumber]->position.z > -0.25f)
 			{
-				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
+				//g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -180.0f, 0.0f, true);
 				g_PlayerInput = DOWN;
 			}
 		}
@@ -87,7 +87,7 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		{
 			if (g_Players[g_PlayerNumber]->position.x < 10.25f)
 			{
-				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
+				//g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, 90.0f, 0.0f, true);
 				g_PlayerInput = LEFT;
 			}
 		}
@@ -95,7 +95,7 @@ void ProcessAsyncKeys(GLFWwindow* window)
 		{
 			if (g_Players[g_PlayerNumber]->position.x > -0.25f)
 			{
-				g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
+				//g_Players[g_PlayerNumber]->setMeshOrientationEulerAngles(0.0f, -90.0f, 0.0f, true);
 				g_PlayerInput = RIGHT;
 			}
 		}
@@ -104,10 +104,14 @@ void ProcessAsyncKeys(GLFWwindow* window)
 			if (!isFireProjectile)
 			{
 				isFireProjectile = true;
-				std::cout << "fire" << std::endl;
 				g_BulletPosition = g_Players[g_PlayerNumber]->position;
 				g_BulletDirection = g_PlayerInput;
 			}
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+		{
+			g_PlayerInput = ENTER;
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)	// "down"

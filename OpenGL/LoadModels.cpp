@@ -88,18 +88,18 @@ void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 				vec_pObjectsToDraw.push_back(pBullet);
 				g_Bullets.push_back(pBullet);	
 				
-				cMeshObject* pHitBox = new cMeshObject();
+				//cMeshObject* pHitBox = new cMeshObject();
 
-				pHitBox->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
-				pHitBox->setSpecularPower(100.0f);
-				pHitBox->position = glm::vec3((float)x, 1.0f, (float)z);
-				pHitBox->setUniformScale(0.15f);
-				pHitBox->meshName = "hitsphere.ply";
-				pHitBox->bIsVisible = true;
+				//pHitBox->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
+				//pHitBox->setSpecularPower(100.0f);
+				//pHitBox->position = glm::vec3((float)x, 1.0f, (float)z);
+				//pHitBox->setUniformScale(0.15f);
+				//pHitBox->meshName = "hitsphere.ply";
+				//pHitBox->bIsVisible = true;
 
-				pBullet->pDebugRenderer = ::g_pDebugRenderer;
-				vec_pObjectsToDraw.push_back(pHitBox);
-				g_HitBoxes.push_back(pHitBox);
+				//pHitBox->pDebugRenderer = ::g_pDebugRenderer;
+				//vec_pObjectsToDraw.push_back(pHitBox);
+				//g_HitBoxes.push_back(pHitBox);
 			}
 		}
 	}

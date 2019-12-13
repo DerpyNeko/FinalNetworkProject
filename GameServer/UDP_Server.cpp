@@ -6,6 +6,7 @@
 #include <ctime>
 #include <iostream>
 
+
 #include "FinalProject.pb.h"
 using namespace FinalProject;
 
@@ -25,6 +26,8 @@ std::clock_t prev;
 double elapsed_secs;
 
 enum State { ACTIVE, INACTIVE };
+
+std::vector< std::pair <int, int> > mStartingPositions;
 
 void _PrintWSAError(const char* file, int line)
 {
@@ -89,16 +92,13 @@ UDPServer::UDPServer(void) : mIsRunning(false), mListenSocket(INVALID_SOCKET)
 		for (int z = 0; z < 11; z = z + 10)
 		{
 			Player* newPlayer = new Player();
-			newPlayer->set_state(INACTIVE);
+			newPlayer->set_state(ACTIVE);
 			newPlayer->add_position(x);
 			newPlayer->add_position(z);
 			newPlayer->add_velocity(0);
 			newPlayer->set_orientation(0);
 			newPlayer->set_isshooting(false);
 			mPlayers.push_back(newPlayer);
-
-			Port* newPort;
-			mPorts.push_back(newPort);
 
 			Bullet* newBullet = new Bullet();
 			newBullet->set_state(INACTIVE);
@@ -109,6 +109,14 @@ UDPServer::UDPServer(void) : mIsRunning(false), mListenSocket(INVALID_SOCKET)
 			newBullet->set_orientation(0);
 			mBullets.push_back(newBullet);
 		}
+	}
+
+	int arr[] = { 0, 0, 10, 10 };
+	int arr1[] = { 0, 10, 0, 10 };
+
+	for (int i = 0; i < 4; i++)
+	{
+		mStartingPositions.push_back(std::make_pair(arr[i], arr1[i]));
 	}
 }
 
@@ -169,9 +177,16 @@ void UDPServer::UpdatePlayers(void)
 			if (orientation == 3)
 				currentx += 0.05f;
 
-		if (currentx < 10.25f)
+		if (currentx > -0.25f)
 			if (orientation == 4)
 				currentx -= 0.05f;
+
+		if (orientation == 5)
+		{
+			mPlayers[i]->set_state(ACTIVE);
+			currentx = mStartingPositions[i].first;
+			currentz = mStartingPositions[i].second;
+		}
 
 		if (orientation != 0)
 		{
@@ -189,10 +204,18 @@ void UDPServer::UpdatePlayers(void)
 
 		mPlayers[i]->set_position(0, currentx);
 		mPlayers[i]->set_position(1, currentz);
-
-		std::cout << "Player " << i << " position: " << mPlayers[i]->position(0) << ", " << mPlayers[i]->position(1) << std::endl;
 	}
 }
+
+const float PLAYERRADIUS = 0.15f;
+const float BULLETRADIUS = 0.1f;
+
+float CalculateDistance(int x1, int y1, int x2, int y2)
+{
+	// Calculating distance 
+	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) * 1.0);
+}
+
 
 void UDPServer::UpdateBullets(void)
 {
@@ -208,32 +231,52 @@ void UDPServer::UpdateBullets(void)
 		{
 			std::cout << "BULLET IS NOW ACTIVE" << std::endl;
 			std::cout << "Current time: " << currentTime << "\nStart time: " << mBullets[i]->starttime() << std::endl;
-			std::cout << "MATH: " << (currentTime - mBullets[i]->starttime()) / (double)CLOCKS_PER_SEC << std::endl;
+			std::cout << "ELAPSEDTIME: " << (currentTime - mBullets[i]->starttime()) / (double)CLOCKS_PER_SEC << std::endl;
 			// THIS MATH IS QUESTIONABLE
 			if ((currentTime - mBullets[i]->starttime()) / (double)CLOCKS_PER_SEC < 2.0f)
 			{
-				// DO COLLISION CHECK HERE 
-				std::cout << "ORIENTATION: " << orientation << std::endl;
-
+				// DO COLLISION CHECK HERE
+				for (int p = 0; p < mPlayers.size(); p++)
+				{
+					// player and bullet vectors are indexed by the same number, dont want to check the player's own bullet against itself
+					if (p != i && mPlayers[p]->state() == ACTIVE)
+					{
+						// CALCULATE DISTANCE BETWEEN TWO POINTS
+						// SQRT( (x2-x1)^2 + (y2-y1)^2 )
+						// MORE QUESTIONABLE MATH
+						float distance = CalculateDistance(mBullets[i]->position(0), mBullets[i]->position(1), mPlayers[p]->position(0), mPlayers[p]->position(1));
+						if (distance < (BULLETRADIUS + PLAYERRADIUS))
+						{
+							std::cout << "COLLIDE" << std::endl;
+							mPlayers[p]->set_state(INACTIVE);
+							mBullets[i]->set_state(INACTIVE);
+						}
+					}
+				}
 
 				// IF NOT COLLISION, MOVE BULLET
-				if (orientation == 1)
-					currentz += 0.08f;
+				// Bullet should still be active unless a collision happened
+				if (mBullets[i]->state() == ACTIVE)
+				{
+					if (orientation == 1)
+						currentz += 0.08f;
 
-				if (orientation == 2)
-					currentz -= 0.08f;
+					if (orientation == 2)
+						currentz -= 0.08f;
 
-				if (orientation == 3)
-					currentx += 0.08f;
+					if (orientation == 3)
+						currentx += 0.08f;
 
-				if (orientation == 4)
-					currentx -= 0.08f;
+					if (orientation == 4)
+						currentx -= 0.08f;
 
-				mBullets[i]->set_position(0, currentx);
-				mBullets[i]->set_position(1, currentz);
+					mBullets[i]->set_position(0, currentx);
+					mBullets[i]->set_position(1, currentz);
+				}
 			}
 			else
 			{
+				// Two seconds have past, so reset the bullet
 				mBullets[i]->set_state(INACTIVE);
 			}
 		}
@@ -242,8 +285,6 @@ void UDPServer::UpdateBullets(void)
 			mBullets[i]->set_position(0, mPlayers[i]->position(0));
 			mBullets[i]->set_position(1, mPlayers[i]->position(1));
 		}
-
-		std::cout << "Bullet " << i << " position: " << mBullets[i]->position(0) << ", " << mBullets[i]->position(1) << std::endl;
 	}
 }
 
@@ -279,7 +320,6 @@ void UDPServer::BroadcastUpdate(void)
 	std::vector<char> packet;
 	packet.push_back(0);
 	packet.push_back(serializedResult.length());
-	std::cout << "NEW LENGTH: " << serializedResult.length() << std::endl;
 
 	const char* temp = serializedResult.c_str();
 	for (int i = 0; i < serializedResult.length(); i++)
@@ -291,9 +331,7 @@ void UDPServer::BroadcastUpdate(void)
 	unsigned char a = packet[1];
 	unsigned int la = a;
 
-	std::cout << "id: " << id << " SIZE: " << la << std::endl;
-
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < numPlayersConnected; i++)
 	{
 		int result = sendto(mListenSocket, &packet[0], packet.size(), 0, (struct sockaddr*) & (mPorts[i]->si_other), sizeof(mPorts[i]->si_other));
 
@@ -302,7 +340,6 @@ void UDPServer::BroadcastUpdate(void)
 			if (WSAGetLastError() == WSAEWOULDBLOCK)
 				return;
 
-			std::cout << "Erroring in send" << std::endl;
 			PrintWSAError();
 			return;
 		}
@@ -318,20 +355,19 @@ void UDPServer::BroadcastUpdate(void)
 Player* GetPlayerByPort(unsigned short port, struct sockaddr_in si_other, SOCKET mListenSocket)
 {
 	// If a player with this port is already connected, return it
-	for (int i = 0; i < mPlayers.size(); i++)
+	for (int i = 0; i < numPlayersConnected; i++)
 	{
 		if (mPorts[i]->port == port)
 		{
-			std::cout << "Port: " << mPorts[numPlayersConnected]->port << std::endl;
-			std::cout << "Port " << i << ": " << mPorts[i]->port << std::endl;
-			std::cout << "Found existing port" << std::endl;
 			return mPlayers[i];
 		}
 	}
 
 	// Otherwise create a new player, and return that one!
-	mPorts[numPlayersConnected]->port = port;
-	mPorts[numPlayersConnected]->si_other = si_other;
+	Port* newPort = new Port();
+	newPort->port = port;
+	newPort->si_other = si_other;
+	mPorts.push_back(newPort);
 	mPlayers[numPlayersConnected]->set_state(ACTIVE);
 	mBullets[numPlayersConnected]->set_state(INACTIVE);
 
@@ -339,11 +375,10 @@ Player* GetPlayerByPort(unsigned short port, struct sockaddr_in si_other, SOCKET
 
 	PlayerNumber* playerNum = new PlayerNumber();
 	playerNum->set_number(-1);
-	std::cout << "Player num from packet is: " << playerNum->number() << std::endl;
 	playerNum->set_number(numPlayersConnected);
 	std::string serializedResult = playerNum->SerializeAsString();
 
-	std::cout << "Number is: " << playerNum->number() << std::endl;
+	std::cout << "Player Number is: " << playerNum->number() << std::endl;
 
 	std::vector<char> packet;
 	packet.push_back(10);
@@ -374,7 +409,6 @@ void UDPServer::ReadData(void)
 
 		PrintWSAError();
 
-		std::cout << "Casually erroring" << std::endl;
 		packet.clear();
 		return;
 	}
@@ -390,50 +424,12 @@ void UDPServer::ReadData(void)
 		packetContents += packet[i];
 	}
 
-	if (id == 10)
-	{
-		//PlayerNumber* playerNum = new PlayerNumber();
-		//playerNum->ParseFromString(packetContents);
-		//if (playerNum->number() == -1)
-		//{
-		//	playerNum->set_number(numPlayersConnected--);
-		//	std::string serializedResult = playerNum->SerializeAsString();
+	UserInput* input = new UserInput();
+	input->ParseFromString(packetContents);
 
-		//	std::vector<char> packet;
-		//	packet.push_back(id);
-		//	packet.push_back(serializedResult.length());
+	Player* player = GetPlayerByPort(port, si_other, mListenSocket);
 
-		//	const char* temp = serializedResult.c_str();
-		//	for (int i = 0; i < serializedResult.length(); i++)
-		//	{
-		//		packet.push_back(temp[i]);
-		//	}
-
-		//	int result = sendto(mListenSocket, &packet[0], packet.size(), 0, (struct sockaddr*) & si_other, sizeof(si_other));
-		//}
-
-	}
-	else
-	{
-		UserInput* input = new UserInput();
-		input->ParseFromString(packetContents);
-
-		Player* player = GetPlayerByPort(port, si_other, mListenSocket);
-
-		//player->up = buffer[0] == 1;
-		//player->down = buffer[1] == 1;
-		//player->right = buffer[2] == 1;
-		//player->left = buffer[3] == 1;
-
-		player->set_orientation(input->input());
-		player->set_isshooting(input->isshooting());
-
-		//printf("%d : %hu received { %d %d %d %d }\n", mListenSocket, port, player->up, player->down, player->right, player->left);
-
-		std::cout << "Player input is " << player->orientation() << std::endl;
-
-		// Send the data back to the client
-		// result = sendto(mListenSocket, buffer, 1, 0, (struct sockaddr*) & si_other, sizeof(si_other));
-	}
+	player->set_orientation(input->input());
+	player->set_isshooting(input->isshooting());
 }
 
