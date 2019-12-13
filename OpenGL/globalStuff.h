@@ -51,6 +51,7 @@ void DrawObject(cMeshObject* pCurrentMesh, glm::mat4x4 &matModel, GLuint shaderP
 extern int g_PlayerNumber;
 extern std::vector<cMeshObject*> g_Players;
 extern std::vector<cMeshObject*> g_Bullets;
+extern std::vector<cMeshObject*> g_HitBoxes;
 extern glm::vec3 g_BulletPosition;
 
 enum Direction { NONE, UP, DOWN, LEFT, RIGHT };

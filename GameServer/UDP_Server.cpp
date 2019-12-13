@@ -215,6 +215,7 @@ void UDPServer::UpdateBullets(void)
 				// DO COLLISION CHECK HERE 
 				std::cout << "ORIENTATION: " << orientation << std::endl;
 
+
 				// IF NOT COLLISION, MOVE BULLET
 				if (orientation == 1)
 					currentz += 0.08f;

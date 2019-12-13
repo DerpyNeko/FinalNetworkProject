@@ -17,7 +17,7 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 	pTheVAOMeshManager->LoadModelIntoVAO(playerInfo, shaderProgramID);
 
 	sModelDrawInfo shotInfo;
-	shotInfo.meshFileName = "shot.ply";
+	shotInfo.meshFileName = "hitsphere.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(shotInfo, shaderProgramID);
 
 	sModelDrawInfo sphereInvertedNormalsInfo;
@@ -56,37 +56,50 @@ void LoadModelTypes(cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID)
 // Loads the models we are drawing into the vector
 void LoadModelsIntoScene(std::vector<cMeshObject*>& vec_pObjectsToDraw)
 {
-	// player object
+	// pPlayer object
 	{
 		for (int x = 0; x < 11; x = x + 10)
 		{
 			for (int z = 0; z < 11; z = z + 10)
 			{
-				cMeshObject* player = new cMeshObject();
-				player->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
-				player->setUniformScale(0.15f);
-				player->setSpecularPower(100.0f);
-				player->position = glm::vec3((float)x, 1.0f, (float)z);
-				std::cout << "Starting Position: " << player->position.x << ", " << player->position.y << ", " << player->position.z << std::endl;
+				cMeshObject* pPlayer = new cMeshObject();
+				pPlayer->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+				pPlayer->setUniformScale(0.15f);
+				pPlayer->setSpecularPower(100.0f);
+				pPlayer->position = glm::vec3((float)x, 1.0f, (float)z);
+				std::cout << "Starting Position: " << pPlayer->position.x << ", " << pPlayer->position.y << ", " << pPlayer->position.z << std::endl;
 
-				player->meshName = "player.ply";
-				player->bIsVisible = true;
+				pPlayer->meshName = "player.ply";
+				pPlayer->bIsVisible = true;
 
-				vec_pObjectsToDraw.push_back(player);
-				g_Players.push_back(player);
+				vec_pObjectsToDraw.push_back(pPlayer);
+				g_Players.push_back(pPlayer);
 
-				cMeshObject* bullet = new cMeshObject();
+				cMeshObject* pBullet = new cMeshObject();
 
-				bullet->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
-				bullet->setSpecularPower(100.0f);
-				bullet->position = glm::vec3((float)x, 1.0f, (float)z);
-				bullet->setUniformScale(0.2f);
-				bullet->meshName = "shot.ply";
-				bullet->bIsVisible = true;
+				pBullet->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
+				pBullet->setSpecularPower(100.0f);
+				pBullet->position = glm::vec3((float)x, 1.0f, (float)z);
+				pBullet->setUniformScale(0.1f);
+				pBullet->meshName = "hitsphere.ply";
+				pBullet->bIsVisible = true;
 
-				bullet->pDebugRenderer = ::g_pDebugRenderer;
-				vec_pObjectsToDraw.push_back(bullet);
-				g_Bullets.push_back(bullet);
+				pBullet->pDebugRenderer = ::g_pDebugRenderer;
+				vec_pObjectsToDraw.push_back(pBullet);
+				g_Bullets.push_back(pBullet);	
+				
+				cMeshObject* pHitBox = new cMeshObject();
+
+				pHitBox->setDiffuseColour(glm::vec3(0.0f, 0.0f, 1.0f));
+				pHitBox->setSpecularPower(100.0f);
+				pHitBox->position = glm::vec3((float)x, 1.0f, (float)z);
+				pHitBox->setUniformScale(0.15f);
+				pHitBox->meshName = "hitsphere.ply";
+				pHitBox->bIsVisible = true;
+
+				pBullet->pDebugRenderer = ::g_pDebugRenderer;
+				vec_pObjectsToDraw.push_back(pHitBox);
+				g_HitBoxes.push_back(pHitBox);
 			}
 		}
 	}

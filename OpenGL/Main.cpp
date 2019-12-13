@@ -39,6 +39,7 @@ int g_PlayerNumber = -1;
 bool isFireProjectile = false;
 std::vector<cMeshObject*> g_Players;
 std::vector<cMeshObject*> g_Bullets;
+std::vector<cMeshObject*> g_HitBoxes;
 glm::vec3 g_BulletPosition = {};
 double startTime = 0.0;
 double currentTime = 0.0;
@@ -415,6 +416,7 @@ int main(void)
 		for (int i = 0; i < 4; i++) 
 		{
 			client.SetPlayerPosition(i, g_Players[i]->position.x, g_Players[i]->position.z);
+			client.SetPlayerPosition(i, g_HitBoxes[i]->position.x, g_HitBoxes[i]->position.z);
 			client.SetBulletPosition(i, g_Bullets[i]->position.x, g_Bullets[i]->position.z);
 		}
 
