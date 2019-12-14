@@ -6,6 +6,8 @@ Change the start up projects of the solution to:
   - GameServer first, then GameClient
   - Action set to Start
   
+Copy assets folder from OpenGL folder to the x64/Release folder
+  
 Start without debugging
   - This will open 3 windows: 1 for the server, 1 for the client, and the Game window
     - WASD to move
