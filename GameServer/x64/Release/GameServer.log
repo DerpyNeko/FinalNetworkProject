@@ -1,0 +1,66 @@
+﻿  FinalProject.pb.cc
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(314,62): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(322,65): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(592,62): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(868,65): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(906,71): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(1224,65): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(1262,71): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(1561,66): warning C4244: '=': conversion from 'google::protobuf::uint64' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\dev\include\google\protobuf\has_bits.h(73,1): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\dev\include\google\protobuf\has_bits.h(72): message : while compiling class template member function 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)'
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\FinalProject.pb.cc(347): message : see reference to function template instantiation 'void google::protobuf::internal::HasBits<1>::Or(const google::protobuf::internal::HasBits<1> &)' being compiled
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\dev\include\google\protobuf\has_bits.h(83): message : see reference to class template instantiation 'google::protobuf::internal::HasBits<1>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(632): message : see reference to class template instantiation 'std::chrono::duration<double,std::ratio<1,1>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(178): message : see reference to class template instantiation 'std::chrono::duration<__int64,std::nano>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(610): message : see reference to class template instantiation 'std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds>' being compiled
+  Main_Server.cpp
+  UDP_Server.cpp
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(96,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(97,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(105,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(106,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(162,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(164,21): warning C4244: 'initializing': conversion from 'google::protobuf::int32' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(189,37): warning C4244: '=': conversion from '_Ty1' to 'float', possible loss of data
+          with
+          [
+              _Ty1=google::protobuf::io::CodedInputStream::Limit
+          ]
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(190,37): warning C4244: '=': conversion from '_Ty2' to 'float', possible loss of data
+          with
+          [
+              _Ty2=int
+          ]
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(202,43): warning C4244: 'argument': conversion from 'clock_t' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(203,35): warning C4244: 'argument': conversion from 'float' to 'google::protobuf::int32', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(219,13): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(224,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(226,21): warning C4244: 'initializing': conversion from 'google::protobuf::int32' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(230,21): warning C4244: 'initializing': conversion from 'clock_t' to 'float', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(249,141): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(249,115): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(249,89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(249,63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(326,44): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=char
+          ]
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(338,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(340,139): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(362,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(389,44): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=char
+          ]
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(397,114): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(408,105): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\GameServer\UDP_Server.cpp(426,20): warning C4018: '<=': signed/unsigned mismatch
+  Generating code
+  1008 of 1022 functions (98.6%) were compiled, the rest were copied from previous compilation.
+    12 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  GameServer.vcxproj -> C:\Users\Ryan\Desktop\INFO - 6016\Projects\Final\FinalNetworkProject\x64\Release\GameServer.exe
